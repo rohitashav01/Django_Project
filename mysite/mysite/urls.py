@@ -15,11 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from blog.views import Form,calcul
+from django.views.decorators.csrf import csrf_exempt
+from blog.views import demo
 
 urlpatterns = [
-    path('form/',Form),
-    path('calculator/',calcul),
-    #path('',demo),
     path('admin/', admin.site.urls),
+    path('',csrf_exempt(demo))
+    
 ]
