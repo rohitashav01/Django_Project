@@ -74,8 +74,3 @@ def get_data(request,b_id):
 
 
 
-def is_recently_published(request):
-            now_time = timezone.now() 
-            blog_time = now_time + timezone.timedelta(days=1)
-            print(blog_time)
-
