@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-
-
+from django.http import HttpResponse,Http404
+from blog.models import Blog
+from django.utils import timezone
 
 # Create your views here.
 def addition(num1,num2):
@@ -18,35 +18,36 @@ def divide(num1,num2):
     return res
 
 def demo(request):
-
-    form = """
+    num1 = request.GET.get('num1','')
+    num2 = request.GET.get('num2','')
+    form = f"""
     <div id = "output">
-        <form method = "GET" onsubmit = "return false" >
-            <input type = "text" name = "num1"  />
-            <input type = "text" name = "num2" />
-            <input type = "submit" name="add" id ="demo" value="+" onclick="formProcess()"/>
-            <input type = "submit" name="sub" value="-" onclick="formProcess()"/>
-            <input type = "submit" name="mul" value="*" onclick="formProcess()"/>
-            <input type = "submit" name="div" value="/" onclick="formProcess()"/> 
+        <form method = "GET"  >
+            <input type = "text" id="num1" name = "num1" value="{num1}" />
+            <input type = "text" id="num2" name = "num2" value="{num2}"/>
+            <input type = "submit" name="add" value="+" />
+            <input type = "submit" name="sub" value="-" />
+            <input type = "submit" name="mul" value="*" />
+            <input type = "submit" name="div" value="/" /> 
         </form>
     </div>
      
-    """
-    scr = """
-        function formProcess(){
-            
-            var capture = document.forms["input"]["demo"].value;
-            capture += document.forms["input"]["num2"].value;
-            document.getElementById("output").innerHTML = capture;
-            console.log(capture);
-        }
-    """
+     """
+    # scr = """
+    #     <script>
+    #     function formProcess(){
+    #         var capture = document.forms["input"]["num1"].value + '<br>';
+    #         capture += document.forms["input"]["num2"].value + '<br>';
+    #         document.getElementById("output").innerHTML = capture;
+    #         console.log(capture);
+    #     }
+    # </script>
+    # """
 
     result = " "
     
     if  request.method  == "GET":
-        num1 = request.GET.get('num1')
-        num2 = request.GET.get('num2')
+        
         print(request.GET)
         if 'add' in request.GET:
             result = addition(num1,num2)
@@ -57,7 +58,24 @@ def demo(request):
         if 'div' in request.GET:
             result = divide(num1,num2)
        
-    return HttpResponse(f"<html><body>{form}<h1>Output:{result}</h1><script>{scr}</script></body></html>")
+    return HttpResponse(f"<html><body>{form}<h1>Output:{result}</h1></body></html>")
     
 
+
+def detail(request,comment_id):
+    return HttpResponse("This is the comment %s for Blog" % comment_id)
+
+def get_data(request,b_id):
+    try:
+        result = Blog.objects.get(pk=b_id)
+    except Blog.DoesNotExist:
+        raise Http404("Blog does not exist")
+    return HttpResponse(f"<html><body><h1>Blog Title: {result.title}</h1><h3>Author: {result.author}</h3><p>{result.description}</p></body></html>")
+
+
+
+def is_recently_published(request):
+            now_time = timezone.now() 
+            blog_time = now_time + timezone.timedelta(days=1)
+            print(blog_time)
 

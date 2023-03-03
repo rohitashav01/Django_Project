@@ -16,10 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
-from blog.views import demo
+from blog.views import demo,detail,get_data,is_recently_published
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',csrf_exempt(demo))
+    path('demo',csrf_exempt(demo),name='calculate'),
+    path('blog/<int:comment_id>/',detail,name='detail'),
+    path('<int:b_id>/',get_data,name='data'),
     
+
 ]
