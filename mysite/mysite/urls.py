@@ -15,14 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django.views.decorators.csrf import csrf_exempt
-from blog.views import demo,detail,get_data,is_recently_published
+from blog.views import demo,list_blogs,update
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('demo',csrf_exempt(demo),name='calculate'),
-    path('blog/<int:comment_id>/',detail,name='detail'),
-    path('<int:b_id>/',get_data,name='data'),
+    path('demo/create',demo,name='create'),
+    path('demo/list',list_blogs,name='list'),
+    path('demo/update',update,name='update'),
     
-
+    # path('blog/<int:comment_id>/',detail,name='detail'),
+    # path('<int:b_id>/',get_data,name='data'),
 ]

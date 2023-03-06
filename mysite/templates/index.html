@@ -1,1 +1,15 @@
-this is the html file
+ <form method = "POST" style="margin:20px;" >
+    {% csrf_token %}
+    {{form.as_div}}
+    <input type = 'submit' name = 'submit' style="color: black;margin-top: 20px" value="Submit">
+    <!-- <input type = "text" id="num1" name = "num1"  />
+    <input type = "text" id="num2" name = "num2"  />
+    <input type = "submit" name="add" value="+" />
+    <input type = "submit" name="sub" value="-" />
+    <input type = "submit" name="mul" value="*" />
+    <input type = "submit" name="div" value="/" />   -->
+</form>
+
+<!-- <h2>Output:</h2>
+{{result}}   -->
+
