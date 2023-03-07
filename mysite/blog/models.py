@@ -7,6 +7,6 @@ class Blog(models.Model):
     author = models.CharField(max_length=150)
     description = models.TextField()
     is_published = models.BooleanField(default=False)
-    published_on = models.DateField()
+    #published_on = models.DateTimeField(auto_now=True)
 
 

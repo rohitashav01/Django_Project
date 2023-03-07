@@ -1,0 +1,12 @@
+
+<div>
+    {% for blog in blog %}
+       <h3><b>{{blog.title}}</b></h3>
+       <p>{{blog.description}}</p>
+       <em>{{blog.author}}</em><br>
+       <br>
+       <a href = "/demo/update">Edit</a> || <a href="/demo/{{blog.id}}/delete">Delete</a>   
+       <hr> 
+    {%endfor%}
+</div>
+
