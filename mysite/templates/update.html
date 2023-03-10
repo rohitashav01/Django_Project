@@ -1,7 +1,4 @@
 <div>
-    {% if error_msg %}
-        <p>{{error_msg}}</p>
-    {% endif %}
     <form action = "" method = "post" >
         {% csrf_token %}
         {{form.as_div}}

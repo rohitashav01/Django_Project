@@ -24,8 +24,7 @@ def update_blog(request,**kwargs):
     error_msg = ""
     form = BlogForm()
     if request.method == 'POST':
-        if id:= kwargs.get('id'):
-            try:
+            if id:= kwargs.get('id'):
                 obj = Blog.objects.get(id=id)
                 form = BlogForm(request.POST or None, instance=obj)
                 if form.is_valid():
@@ -33,10 +32,8 @@ def update_blog(request,**kwargs):
                     demo.is_published = True
                     demo.save()
                     return redirect('/demo/list')
-            except Exception as e:
-                error_msg = "Blog does not exist"
 
-    context = {'form':form,'error_msg':error_msg}
+    context = {'form':form}
     return render(request, 'update.html',context)
 
 

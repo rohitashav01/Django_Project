@@ -8,5 +8,5 @@ class RegisterForms(forms.Form):
 class BlogForm(forms.ModelForm):
     class Meta:
         model = Blog
-        fields = ['title','author','description','is_published']
+        fields = ['title','author','description','is_published','published_on']
 
