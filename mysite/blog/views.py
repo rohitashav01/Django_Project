@@ -28,20 +28,18 @@ def list_blogs(request):
 
 
 def update_blog(request,**kwargs):
-    error_msg = ""
     form = BlogForm()
-    if id:= kwargs.get('id'):
-        obj = Blog.objects.get(id=id)
-        if request.method == 'POST':
+    if request.method == 'POST':
+        if id:= kwargs.get('id'):
+            obj = Blog.objects.get(id=id)
             form = BlogForm(request.POST, instance=obj)
             if form.is_valid():
                 form.save()
-                context['form'] = form
-                HttpResponseRedirect('/demo/list')
+                return redirect('/demo/list')
+    context = {
+        'form':form
+    }
     return render(request, 'update.html' ,context)
-
-    context = {'form':form}
-    return render(request, 'update.html',context)
 
 
 def delete_blog(request,**kwargs):
