@@ -29,6 +29,7 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
+CUSTOM = 'hello world'
 
 INSTALLED_APPS = [
     'django.contrib.admin',

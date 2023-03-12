@@ -2,7 +2,14 @@ from django.shortcuts import render,HttpResponseRedirect
 from django.http import HttpResponse,Http404
 from blog.forms import RegisterForms,BlogForm
 from blog.models import Blog
+from django.conf import settings 
 # Create your views here.
+
+#getting keyword argument from settings.py
+var = settings.CUSTOM
+demo = settings.DEBUG
+print(var)
+print(demo)
 
 def create_blog(request): 
     form = BlogForm()
@@ -30,7 +37,8 @@ def update_blog(request,**kwargs):
             if form.is_valid():
                 form.save()
                 context['form'] = form
-                HttpResponseRedirect('/demo/list')
+                HttpResponseRedirect('/demo/list/')
+        #context = {'form':form}
     return render(request, 'update.html' ,context)
 
 
