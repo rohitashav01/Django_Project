@@ -1,5 +1,4 @@
-from django.shortcuts import render,HttpResponseRedirect
-from django.http import HttpResponse,Http404
+from django.shortcuts import render,redirect
 from blog.forms import RegisterForms,BlogForm
 from blog.models import Blog
 from django.conf import settings 
@@ -21,6 +20,7 @@ def create_blog(request):
             blog.save()
     return render(request,'create.html', {'form': form})
     
+
 def list_blogs(request):
     blog = Blog.objects.all()
     return render(request,'list.html', {'blog': blog})
@@ -28,7 +28,7 @@ def list_blogs(request):
 
 
 def update_blog(request,**kwargs):
-    context = {}
+    error_msg = ""
     form = BlogForm()
     if id:= kwargs.get('id'):
         obj = Blog.objects.get(id=id)
@@ -37,11 +37,11 @@ def update_blog(request,**kwargs):
             if form.is_valid():
                 form.save()
                 context['form'] = form
-                HttpResponseRedirect('/demo/list/')
-        #context = {'form':form}
+                HttpResponseRedirect('/demo/list')
     return render(request, 'update.html' ,context)
 
-
+    context = {'form':form}
+    return render(request, 'update.html',context)
 
 
 def delete_blog(request,**kwargs):
