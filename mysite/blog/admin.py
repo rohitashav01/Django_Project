@@ -6,7 +6,7 @@ from django.utils import timezone
 # Register your models here.
 
 class BlogAdmin(admin.ModelAdmin):
-    list_display = ['title', 'author', 'description', 'is_published','recently_published']
+    list_display = ['title', 'author', 'description', 'is_published','is_recently_published']
     list_filter = ['is_published']
     search_fields = ['title']
 
