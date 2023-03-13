@@ -1,14 +1,14 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,reverse
 from blog.forms import RegisterForms,BlogForm
 from blog.models import Blog
 from django.conf import settings 
 # Create your views here.
 
 #getting keyword argument from settings.py
-var = settings.CUSTOM
-demo = settings.DEBUG
-print(var)
-print(demo)
+# var = settings.CUSTOM
+# demo = settings.DEBUG
+# print(var)
+# print(demo)
 
 def create_blog(request): 
     form = BlogForm()
@@ -35,6 +35,7 @@ def update_blog(request,**kwargs):
             form = BlogForm(request.POST, instance=obj)
             if form.is_valid():
                 form.save()
+                #return reverse('list')
                 return redirect('/demo/list')
     context = {
         'form':form

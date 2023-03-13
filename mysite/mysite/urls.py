@@ -16,14 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from blog.views import create_blog,list_blogs,update_blog,delete_blog
-
+from shop.views import add_product,product_detail,add_to_cart
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('demo/create',create_blog),
-    path('demo/list',list_blogs),
-    path('demo/<int:id>/update',update_blog),
-    path('demo/<int:pk>/delete',delete_blog)
-    
-    # path('blog/<int:comment_id>/',detail,name='detail'),
-    # path('<int:b_id>/',get_data,name='data'),
+    path('demo/create',create_blog,name='create'),
+    path('demo/list',list_blogs,name='list'),
+    path('demo/<int:id>/update',update_blog,name='update'),
+    path('demo/<int:pk>/delete',delete_blog,name='delete'),
+    path('shop/add',add_product,name='add'),
+    path('shop/details',product_detail,name='detail'),
+    path('shop/<int:id>/cart',add_to_cart,name='add_cart')
 ]

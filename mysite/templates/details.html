@@ -1,0 +1,13 @@
+<div>
+    <h2>List of Products</h2>
+    {% for prod in prod %}
+       <h3><b>{{prod.name}}</b></h3>
+       <p>{{prod.price}}</p>
+       <em>{{prod.quantity}}</em><br>
+       <br>
+       <a href = '/shop/<int:id>/cart'>Add To Cart</a>
+       <br>   
+       <hr> 
+    {%endfor%}
+</div>
+
