@@ -1,13 +1,12 @@
 <div>
+    
     <h2>Cart Details</h2>
-    {{name}}
-    {{cook}}
+    {{request.session.cart}}
     {%for data in data%}
        <h3><b>Model: {{data.prod.name}}</b></h3>
        <p>Price: {{data.prod.price}}</p>
        <em>Quantity: {{data.prod.quantity}}</em><br>
        <br>  
-       <!-- <a href = "/remove/{{data.id}}">Remove From Cart</a> -->
        <a href = "/remove/{{data.id}}">Remove From Cart</a>
        <hr>
     {%endfor%}

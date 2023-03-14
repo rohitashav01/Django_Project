@@ -3,6 +3,7 @@ from .models import Product,Cart
 from shop.forms import ProdForm,AddUser
 from django.contrib.auth.models import User
 from django.contrib import messages
+
 # Create your views here.
 
 def add_user(request):
@@ -30,25 +31,27 @@ def product_detail(request):
 
 
 def add_to_cart(request,**kwargs):
+
+
     if id := kwargs.get('id'):
+
+        #from database
         data = Product.objects.get(id = id)
+
         cart_data = Cart.objects.create(prod_id = id)
         cart_data.save()
-        lst = []
+
+        #from session
         cart_items = [{'Name':data.name,'Price':data.price}]
-        for item in cart_items:
-            request.session['items'] = item
-            new_item = request.session['items']
-            request.session['var'] = lst.append(new_item)
-            name = request.session['var']
-            cook = request.META.get('HTTP_COOKIE')
+        cart = request.session.get('cart',[])
+        cart.append(cart_items)
+        request.session['cart'] = cart
+        
+
+          
+        #cook = request.META.get('HTTP_COOKIE')
     data = Cart.objects.all()
-    context = {
-        'data':data, 
-        'name':name,
-        'cook':cook
-    }   
-    return render(request,'cart.html',context)
+    return render(request,'cart.html',{'data':data})
 
 
 
