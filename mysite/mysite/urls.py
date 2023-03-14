@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from blog.views import create_blog,list_blogs,update_blog,delete_blog
-from shop.views import add_product,product_detail,add_to_cart
+from shop.views import add_product,product_detail,add_to_cart,remove_from_cart,add_user
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('demo/create',create_blog,name='create'),
@@ -25,5 +25,7 @@ urlpatterns = [
     path('demo/<int:pk>/delete',delete_blog,name='delete'),
     path('shop/add',add_product,name='add'),
     path('shop/details',product_detail,name='detail'),
-    path('shop/<int:id>/cart',add_to_cart,name='add_cart')
+    path('shop/<int:id>',add_to_cart,name='add_cart'),
+    path('remove/<int:pk>',remove_from_cart,name='remove'),
+    path('shop/add_user',add_user,name='new_user')
 ]

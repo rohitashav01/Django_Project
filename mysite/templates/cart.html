@@ -1,10 +1,17 @@
 <div>
     <h2>Cart Details</h2>
-    {% for data in data %}
-       <h3><b>{{data.name}}</b></h3>
-       <p>{{data.price}}</p>
-       <em>{{data.quantity}}</em><br>
-       <br>
+    {{name}}
+    {{cook}}
+    {%for data in data%}
+       <h3><b>Model: {{data.prod.name}}</b></h3>
+       <p>Price: {{data.prod.price}}</p>
+       <em>Quantity: {{data.prod.quantity}}</em><br>
+       <br>  
+       <!-- <a href = "/remove/{{data.id}}">Remove From Cart</a> -->
+       <a href = "/remove/{{data.id}}">Remove From Cart</a>
+       <hr>
     {%endfor%}
+    
+    <button type="submit">Check Out</button>
 </div>
 
