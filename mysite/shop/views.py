@@ -1,9 +1,9 @@
-from django.shortcuts import render,redirect,reverse
-from .models import Product,Cart
+from django.shortcuts import render,redirect,reverse,HttpResponse
+from .models import Product
 from shop.forms import ProdForm,AddUser
 from django.contrib.auth.models import User
 from django.contrib import messages
-
+from mysite.core.helper import add_to_cart_helper,remove_from_cart_helper 
 # Create your views here.
 
 def add_user(request):
@@ -31,34 +31,12 @@ def product_detail(request):
 
 
 def add_to_cart(request,**kwargs):
+        cart = add_to_cart_helper(request,**kwargs)
+        print(cart)
 
-
-    if id := kwargs.get('id'):
-
-        #from database
-        data = Product.objects.get(id = id)
-
-        cart_data = Cart.objects.create(prod_id = id)
-        cart_data.save()
-
-        #from session
-        cart_items = [{'Name':data.name,'Price':data.price}]
-        cart = request.session.get('cart',[])
-        cart.append(cart_items)
-        request.session['cart'] = cart
-        
-
-          
-        #cook = request.META.get('HTTP_COOKIE')
-    data = Cart.objects.all()
-    return render(request,'cart.html',{'data':data})
-
-
+        return render(request,'cart.html',{'cart':cart})
 
 def remove_from_cart(request,**kwargs):
-    if pk:=kwargs.get('pk'):
-        del_data = Cart.objects.get(pk = pk)
-        del_data.delete()
-    data = Cart.objects.all()
-    return render(request,'cart.html', {'data':data})
-
+      var = remove_from_cart_helper(request,**kwargs)
+      print(var)
+      return render(request,'cart.html',{'var':var})

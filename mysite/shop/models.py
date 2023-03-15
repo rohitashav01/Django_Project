@@ -7,6 +7,5 @@ class Product(models.Model):
     price = models.IntegerField()
     quantity = models.IntegerField()
   
-class Cart(models.Model):
-    prod = models.ForeignKey(Product,on_delete=models.CASCADE)
+
     

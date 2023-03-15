@@ -1,16 +1,11 @@
 <div>
-    
-    <h2>Cart Details</h2>
-    {{request.session.cart}}
-    {%for data in data%}
-       <h3><b>Model: {{data.prod.name}}</b></h3>
-       <p>Price: {{data.prod.price}}</p>
-       <em>Quantity: {{data.prod.quantity}}</em><br>
-       <br>  
-       <a href = "/remove/{{data.id}}">Remove From Cart</a>
-       <hr>
-    {%endfor%}
-    
-    <button type="submit">Check Out</button>
+    {% for item in request.session.cart %}
+        <p>{{item.ID}}</p>
+        <p>{{item.Name}}</p>
+        <p>{{item.Price}}</p>
+        <p>{{item.Quantity}}</p>
+        <br>
+        <a href = "/remove/{{item.ID}}">Remove From Cart</a>
+        <hr>
+    {% endfor %}
 </div>
-
