@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from blog.views import create_blog,list_blogs,update_blog,delete_blog,add_blog_user,user_login,user_logout,home_page
+from blog.views import create_blog,list_blogs,update_blog,delete_blog,add_blog_user,user_login,user_logout,home_page,publish_blog
 from shop.views import add_product,product_detail,add_to_cart,remove_from_cart,add_user
 urlpatterns = [
     path('',home_page,name='home'),
@@ -27,8 +27,9 @@ urlpatterns = [
     path('demo/logout',user_logout,name='user_logout',),
     path('demo/<int:id>/update',update_blog,name='update'),
     path('demo/<int:pk>/delete',delete_blog,name='delete'),
+    path('demo/<int:id>/publish',publish_blog,name='delete'),
     path('shop/add',add_product,name='add'),
-    path('shop/details',product_detail,name='detail'),
+    path('shop/details',product_detail,name='prod_detail'),
     path('shop/<int:id>',add_to_cart,name='add_cart'),
     path('remove/<int:pk>',remove_from_cart,name='remove'),
     path('shop/add_user',add_user,name='new_user')

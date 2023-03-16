@@ -9,4 +9,7 @@ class Blog(models.Model):
     is_published = models.BooleanField(default=False)
     published_on = models.DateTimeField()
 
-
+    class Meta:
+        permissions =(
+            ('can_publish','Can publish blog'),
+        )

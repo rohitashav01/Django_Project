@@ -1,0 +1,128 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  nav {
+    background-color: #c7d8f9;
+  }
+  
+  .logo {
+    width: 300px;
+    height: 35px;
+    margin-left:50px;
+  }
+  
+  .nav_buttons {
+    margin-right: 50px;
+  }
+  
+  .banner {
+    height: 350px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #c75f5f;
+    color: #fff;
+    margin-bottom: 20px;
+  }
+  .contact_us {
+    width: 1040px;
+  }
+  .contact_us_form {
+    margin-top: 70px;
+    
+  }
+  textarea {
+    border: none;
+    border-bottom: 1px solid black;
+    margin-bottom: 70px;
+  }
+  input {
+    border: none;
+    border-bottom: 1px solid black;
+    margin-bottom: 30px;
+  }
+  input:focus {
+    border: none;
+    border-bottom: 1px solid black;
+  }  
+  input[type="submit"] {
+    width: 150px;
+    border: #c69f68;
+    background: orangered;
+    padding: 7px;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    cursor: pointer;
+  }
+  .sidebar-content {
+    border: 1px solid orangered;
+    width: 250px;
+    margin-bottom: 30px;
+    padding: 25px;
+  }
+  .p-undeline {
+    border-bottom: 3px solid orangered;
+    width: fit-content;
+  }
+  .footer {
+    background-color: #c7d8f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 10px;
+  }
+  @media (width < 380px) {
+    .logo {
+      width: 200px;
+      height: 25px;
+    }
+  }
+  
+  @media (width < 1400px) {
+    .contact_us {
+      width: 860px;
+    }
+  }
+  /* @media (width < 1250px) {
+    .contact_us {
+      width: 860px;
+    }
+  } */
+  @media (width < 1200px) {
+    .contact_us {
+      width: 680px;
+    }
+  }
+  @media (width < 580px) {
+    .contact_us {
+      width: 550px;
+    }
+  }
+  @media (width < 550px) {
+    .contact_us {
+      width: 520px;
+    }
+  }
+  @media (width < 500px) {
+    .contact_us {
+      width: 450px;
+    }
+  }
+  @media (width < 450px) {
+    .contact_us {
+      width: 400px;
+    }
+  }
+  @media (width < 400px) {
+    .contact_us {
+      width: 300px;
+    }
+  }

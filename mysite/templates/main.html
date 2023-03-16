@@ -5,8 +5,116 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    
+
     <title>Home Page</title>
+    <style>
+      * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  .contact_us {
+    width: 1040px;
+    margin-top:40px;
+  }
+  .contact_us_form {
+    margin-top: 70px;
+    
+  }
+  textarea {
+    border: none;
+    border-bottom: 1px solid black;
+    margin-bottom: 70px;
+  }
+  input {
+    border: none;
+    border-bottom: 1px solid black;
+    margin-bottom: 30px;
+  }
+  input:focus {
+    border: none;
+    border-bottom: 1px solid black;
+  }  
+  input[type="submit"] {
+    width: 150px;
+    border: #c69f68;
+    background: orangered;
+    padding: 7px;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    cursor: pointer;
+  }
+  .sidebar-content {
+    border: 1px solid orangered;
+    width: 250px;
+    margin-top:40px;
+    margin-bottom: 30px;
+    padding: 25px;
+  }
+  .p-undeline {
+    border-bottom: 3px solid orangered;
+    width: fit-content;
+  }
+  .footer {
+    background-color: #c7d8f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 10px;
+  }
+  @media (width < 380px) {
+    .logo {
+      width: 200px;
+      height: 25px;
+    }
+  }
+  
+  @media (width < 1400px) {
+    .contact_us {
+      width: 860px;
+    }
+  }
+  /* @media (width < 1250px) {
+    .contact_us {
+      width: 860px;
+    }
+  } */
+  @media (width < 1200px) {
+    .contact_us {
+      width: 680px;
+    }
+  }
+  @media (width < 580px) {
+    .contact_us {
+      width: 550px;
+    }
+  }
+  @media (width < 550px) {
+    .contact_us {
+      width: 520px;
+    }
+  }
+  @media (width < 500px) {
+    .contact_us {
+      width: 450px;
+    }
+  }
+  @media (width < 450px) {
+    .contact_us {
+      width: 400px;
+    }
+  }
+  @media (width < 400px) {
+    .contact_us {
+      width: 300px;
+    }
+  }
+  </style>
 </head>
 <body>
     <!-- Navbar -->
@@ -14,11 +122,11 @@
     <!-- Container wrapper -->
     <div class="container">
       <!-- Navbar brand -->
-      <a class="navbar-brand me-2" href="https://mdbgo.com/">
+      <a class="navbar-brand me-2" href="https://www.netsolutions.com/">
         <img
-          src="https://mdbcdn.b-cdn.net/img/logo/mdb-transaprent-noshadows.webp"
+          src="https://www.netsolutions.com/assets/images/net_solutions_logo_black.svg"
+          alt="Logo of Net Solutions India Pvt. Ltd."
           height="16"
-          alt="MDB Logo"
           loading="lazy"
           style="margin-top: -1px;"
         />
@@ -42,24 +150,29 @@
         <!-- Left links -->
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link" href="#">Dashboard</a>
+            <!-- <a class="nav-link" href="#">Dashboard</a> -->
           </li>
         </ul>
         <!-- Left links -->
   
         <div class="d-flex align-items-center">
-          <a href="{% url 'user_login' %}" class="btn btn-link px-3 me-2">
+          
+          <a href="{% url 'user_login' %}" class="btn btn-primary me-3">
             Login
           </a>
           <a href = "{% url 'add_user' %}" type="button" class="btn btn-primary me-3">
             Register
           </a>
-          <a
-            class="btn btn-dark px-3"
-            href="https://github.com/mdbootstrap/mdb-ui-kit"
-            role="button"
-            ><i class="fab fa-github"></i
-          ></a>
+          <a href = "{% url 'list' %}" type="button" class="btn btn-primary me-3">
+            Blogs
+          </a>
+          <a href = "{% url 'prod_detail' %}" type="button" class="btn btn-primary me-3">
+            Products
+          </a>
+          <a href="{% url 'user_logout' %}" class="btn btn-primary me-3 ">
+            Logout
+          </a>
+         
         </div>
       </div>
       <!-- Collapsible wrapper -->
@@ -67,6 +180,68 @@
     <!-- Container wrapper -->
   </nav>
   <!-- Navbar -->
+
+
+  <div class="content container d-flex align-content-start flex-wrap">
+    <!-- Contact Form -->
+    <section>
+        <div class="container contact_us">
+            <h2>Contact Us</h2>
+            <p>Have a web or mobile app project in mind? Let's discuss making your project a reality.</p>
+
+            <div class="contact_us_form">
+                <form name="myForm"  method="post" action="#">
+                    <div class="row">
+                        <div class="col">
+                            <input type="text" name="client-name" placeholder="Name*" >
+                        </div>
+                        <div class="col">
+                            <input type="email" name="email" placeholder="Email*">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <input type="text" name="company-name" placeholder="Company Name*">
+                        </div>
+                        <div class="col">
+                            <input type="number" id= "numb" placeholder="+91">
+                        </div>
+                        <div class="row">
+                            <textarea name="" id="" placeholder="Message*"></textarea>
+                            
+                        </div>
+                    </div>
+                    <div class="submit_button">
+                        <input type="submit" value="Submit">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sidebar -->
+    <aside>
+        <div class="sidebar-content">
+            <h3>Hate Filling out Forms?</h3>
+            <p class="mb-5">Email us</p>
+            <h5 class="m-0">Request a Quote</h5>
+            <p class="mb-4 p-undeline">sales@netsolutions.com</p>
+            <h5 class="m-0">Careers</h5>
+            <p class="mb-4 p-undeline">careers@netsolutions.com</p>
+            <h5 class="m-0">Reference Checks / Misc. HR Queries</h5>
+            <p class="p-undeline">hr@netsolutions.com</p>
+        </div>
+    </aside>
+</div>
+
+<!-- Footer -->
+<footer>
+    <div class="container-fluid footer">
+        &copy; 2023 Net Solutions. All Rights Reserved.
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"  integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"crossorigin="anonymous"></script>
   
 </body>
 </html>
