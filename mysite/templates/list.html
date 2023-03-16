@@ -1,13 +1,16 @@
 
 <div>
     <h2>List of Blogs</h2>
+    <a href = "{% url 'user_logout' %}">Logout</a>
+    {% if msg %}
+        <h1>{{msg}}</h1>
+    {% endif %}
     {% for blog in blog %}
        <h3><b>{{blog.title}}</b></h3>
        <p>{{blog.description}}</p>
        <em>{{blog.author}}</em><br>
        <br>
-       <a href = "/demo/{{blog.id}}/update">Edit</a> || <a href="/demo/{{blog.id}}/delete">Delete</a>   
-       <a href = "{% url 'user_logout' %}">Logout</a>
+       <a href = "/demo/{{blog.id}}/update">Edit</a> || <a href="/demo/{{blog.id}}/delete">Delete</a>  
        <hr> 
     {%endfor%}
 </div>

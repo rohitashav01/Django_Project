@@ -14,6 +14,9 @@ from django.contrib.auth.models import Permission
 # print(var)
 # print(demo)
 
+def home_page(request):
+    return render(request,'main.html',{})
+
 def create_blog(request): 
     form = BlogForm()
     if request.method == 'POST':
@@ -44,18 +47,20 @@ def update_blog(request,**kwargs):
                         form.save()
                         return redirect('/demo/list')
     else:
-        print('hello')
         msg =  "You don't have the permission"
     context={'form':form,'msg':msg}
     return render(request, 'update.html' ,context)
 
 
 def delete_blog(request,**kwargs):
-    if pk:=kwargs.get('pk'):
-        blogs = Blog.objects.get(pk=pk)
-        blogs.delete()
+    if request.user.is_authenticated and request.user.has_perm('blog.change_blog'):
+        if pk:=kwargs.get('pk'):
+            blogs = Blog.objects.get(pk=pk)
+            blogs.delete()
+    else:
+        msg = "You don't have the permission"
     blog = Blog.objects.all()
-    return render(request,'list.html', {'blog': blog})
+    return render(request,'list.html', {'blog': blog,'msg':msg})
 
 def add_blog_user(request):
     form = AddUserForm()
@@ -64,6 +69,7 @@ def add_blog_user(request):
         password = request.POST.get('password')
         new_user = User.objects.create_user(username, password=password)
         new_user.save()
+        print(new_user.username)
     return render(request,'new_user.html',{'form':form})
 
 def user_login(request):
@@ -71,7 +77,6 @@ def user_login(request):
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(request,username=username,password=password)
-        print(user)
         if user is not None:
             login(request, user)
             return redirect('list')
@@ -79,4 +84,4 @@ def user_login(request):
 
 def user_logout(request):
     logout(request)
-    return redirect('templates/login.html')
+    return redirect("user_login")
