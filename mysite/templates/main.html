@@ -169,9 +169,17 @@
           <a href = "{% url 'prod_detail' %}" type="button" class="btn btn-primary me-3">
             Products
           </a>
-          <a href="{% url 'user_logout' %}" class="btn btn-primary me-3 ">
+          <a href="{% url 'user_logout' %}" class="btn btn-primary me-3">
             Logout
           </a>
+          <a href="{% url 'change_password' %}" class="btn btn-primary me-3">
+            Profile
+          </a>
+          <p class="btn mb1 black bg-darken-1 m-3">
+            {% if request.user.is_authenticated %}
+              Welcome: {{request.user.username}}
+            {% endif %}
+          </p>
          
         </div>
       </div>

@@ -77,9 +77,12 @@
                                         </g>
                                     </svg>
                                 </div>
-                                <h4 class="font-weight-bold mb-3"><b>BLOG:</b> {{blog.title}}</h4>
-                                <p class="text-muted mb-0">About: {{blog.description}}</p>
-                                <p class="text-muted mb-0">Wrtiten By: {{blog.author}}</p>
+                                {% if msg %}
+                                    {{msg}}
+                                {% endif %}
+                                <h4 class="font-weight-bold mb-3"><b>BLOG:</b> {{blogs.title}}</h4>
+                                <p class="text-muted mb-0">About: {{blogs.author}}</p>
+                                <p class="text-muted mb-0">Wrtiten By: {{blogs.description}}</p>
                                 <br>
                             </div>
                         </div>
