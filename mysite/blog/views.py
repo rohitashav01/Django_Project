@@ -14,8 +14,7 @@ from django.views import View
 #getting keyword argument from settings.py
 # var = settings.CUSTOM
 # demo = settings.DEBUG
-# print(var)
-# print(demo)
+
 class BlogView(View):
     def get(self,request):
         form = BlogForm()
@@ -31,7 +30,6 @@ class BlogView(View):
                 return redirect('list')
         return render(request,'create.html', {'form': form})
 
-
     # def create_blog(request): 
     #     if request.user.is_authenticated and request.user.has_perm('blog.add_blog'):
     #         if request.method == 'POST':
@@ -44,8 +42,6 @@ class BlogView(View):
     #        raise PermissionDenied(Exception)
     #     return render(request,'create.html', {'form': form})
 
-
-
 #User Permissions
 author_group, created = Group.objects.get_or_create(name="Author")
 admin_group, created = Group.objects.get_or_create(name="Admin")
@@ -56,11 +52,8 @@ def home_page(request):
     return render(request,'main.html',{})
 
 #Add a new blog
-
-
 def list_blogs(request):
     blog = Blog.objects.all()
-    print(request.user)
     return render(request,'list.html', {'blog': blog})
 
 #Update Blog
@@ -111,19 +104,15 @@ def add_blog_user(request):
         return redirect('home')
     return render(request,'new_user.html',{'form':form})
 
-
 def change_password(request):
     if request.method == 'POST':
         username = request.POST['username']
         new_password = request.POST['new_password']
-        print(new_password)
         u = User.objects.get(username=username)
         u.set_password(new_password)    
         u.save()
         return redirect('home')
     return render(request,'profile.html',{})
-
-
 
 #User Login
 def user_login(request):
@@ -134,9 +123,9 @@ def user_login(request):
         if user is not None:
             login(request, user)
             return redirect('home')
+        else:
+            print("user does not exist")
     return render(request,'login.html',{})
-
-
 
 #User Logout
 def user_logout(request):

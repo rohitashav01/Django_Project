@@ -33,7 +33,6 @@ def product_detail(request):
 def add_to_cart(request,**kwargs):
         cart = add_to_cart_helper(request,**kwargs)
         print(cart)
-
         return render(request,'cart.html',{'cart':cart})
 
 def remove_from_cart(request,**kwargs):
