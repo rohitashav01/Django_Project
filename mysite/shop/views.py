@@ -3,7 +3,7 @@ from .models import Product
 from shop.forms import ProdForm,AddUser
 from django.contrib.auth.models import User
 from django.contrib import messages
-from mysite.core.helper import add_to_cart_helper,remove_from_cart_helper 
+from mysite.core.helper import add_to_cart_helper,remove_from_cart_helper,add_to_wishlist_helper 
 # Create your views here.
 
 def add_user(request):
@@ -31,11 +31,16 @@ def product_detail(request):
 
 
 def add_to_cart(request,**kwargs):
-        cart = add_to_cart_helper(request,**kwargs)
-        print(cart)
-        return render(request,'cart.html',{'cart':cart})
+    cart = add_to_cart_helper(request,**kwargs)
+    print(cart)
+    return render(request,'cart.html',{'cart':cart})
 
 def remove_from_cart(request,**kwargs):
-      var = remove_from_cart_helper(request,**kwargs)
-      print(var)
-      return render(request,'cart.html',{'var':var})
+    var = remove_from_cart_helper(request,**kwargs)
+    print(var)
+    return render(request,'cart.html',{'var':var})
+
+
+def add_to_wishlist(request,**kwargs):
+    wishlist = add_to_wishlist_helper(request,**kwargs)
+    return render(request,'ecom/wishlist.html',{'wishlist':wishlist})

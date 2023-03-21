@@ -89,13 +89,15 @@
                         {% if msg %}
                             <h5>{{msg}}</h5>
                         {% endif %}
-                      <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Add a new Blog</p>
-                      <form action ='' method = 'post'>
+                      <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Update Blog</p>
+                      <form action ='' method = 'post' _method = 'put'>
                         {% csrf_token %}
                         <form class="mx-1 mx-md-4">
                               {{form.as_div}}
                               <br>
-                              <input type = 'submit' value = 'Add'> 
+                              <input type = 'hidden' name = '_method' value = 'PUT'> 
+                              <input type = 'submit' value = 'submit'> 
+
                         </form>
                       </form>
                     </div>

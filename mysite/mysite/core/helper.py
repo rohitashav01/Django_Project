@@ -9,9 +9,6 @@ def add_to_cart_helper(request,**kwargs):
         cart_items = {'ID':data.pk,'Name':data.name,'Price':data.price,'Quantity':1}
         if cart != []:
             for i in cart:
-                print(i)
-                print(i['ID'])
-                print(data.pk)
                 if i['ID'] == data.pk:
                     print(i['ID'])
                     i['Quantity'] += 1
@@ -20,7 +17,6 @@ def add_to_cart_helper(request,**kwargs):
                     print('this is from else')
                     cart.append(cart_items)       
         else:
-            data = Product.objects.get(id = id)
             cart.append(cart_items)
         request.session['cart'] = cart
     return request.session['cart']
@@ -38,3 +34,16 @@ def remove_from_cart_helper(request,**kwargs):
             else:
                 print('Not found')
     return request.session['cart']
+
+
+
+def add_to_wishlist_helper(request,**kwargs):
+    if id := kwargs.get('id'):
+        data = Product.objects.get(id = id)
+        wishlist = request.session.get('wishlist',[])
+        wish_items = {'ID':data.pk,'Name':data.name,'Price':data.price,'Quantity':data.quantity}
+        
+        wishlist.append(wish_items)
+        request.session['wishlist'] = wishlist
+        print(request.session['wishlist'])
+    return request.session['wishlist']

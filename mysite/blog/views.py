@@ -16,8 +16,9 @@ from django.views import View
 # demo = settings.DEBUG
 
 class BlogView(View):
+    form = BlogForm()
     def get(self,request):
-        form = BlogForm()
+        form = BlogForm(request.POST)
         context = {'form':form}
         return render(request,'create.html',context)
 
@@ -25,10 +26,49 @@ class BlogView(View):
         if request.user.is_authenticated and request.user.has_perm('blog.add_blog'):
             form = BlogForm(request.POST)
             if form.is_valid():
-                blog = form.save()
-                blog.save()
+                form.save()
                 return redirect('list')
         return render(request,'create.html', {'form': form})
+    
+class BlogUpdate(View):
+    form = BlogForm()
+    def get(self,request,**kwargs):
+        form = BlogForm(request.POST)
+        if id:=kwargs.get('id'):
+            obj = Blog.objects.get(id=id)
+            form = BlogForm(request.POST,instance = obj)
+        context = {'form':form}
+        return render(request,'update.html',context)
+    
+    def put(self,request,**kwargs):
+        if request.user.is_authenticated and request.user.has_perm('blog.change_blog'):
+                if id:= kwargs.get('id'):
+                        obj = Blog.objects.get(id=id)
+                        form = BlogForm(request.PUT, instance = obj)
+                        if form.is_valid():
+                            form.save()
+                        return redirect('list')
+        else:
+            raise PermissionDenied(Exception)
+        return render(request, 'update.html', {'form':form})
+    
+
+    # def get(self,request,**kwargs):
+    #     if id:=kwargs.get('id'):
+    #         demo = Blog.objects.get(id=id)
+    #     return render(request,'list.html',{'demo':demo})
+    
+    def delete(self,request):
+        print("========================>")
+        print("yes")
+        if request.user.is_authenticated and request.user.has_perm('blog.delete_blog'): 
+            blogs = Blog.objects.get(pk=id)
+            blogs.delete()
+        else:
+            raise PermissionDenied(Exception)
+        blog = Blog.objects.all()
+        context = {'blog':blog}
+        return render(request,'list.html',context)
 
     # def create_blog(request): 
     #     if request.user.is_authenticated and request.user.has_perm('blog.add_blog'):
@@ -41,6 +81,8 @@ class BlogView(View):
     #     else:
     #        raise PermissionDenied(Exception)
     #     return render(request,'create.html', {'form': form})
+
+
 
 #User Permissions
 author_group, created = Group.objects.get_or_create(name="Author")
@@ -57,33 +99,33 @@ def list_blogs(request):
     return render(request,'list.html', {'blog': blog})
 
 #Update Blog
-def update_blog(request,**kwargs):
-    form = BlogForm()
-    if request.user.is_authenticated and request.user.has_perm('blog.change_blog'):
-        if request.method == 'POST':
-            if id:= kwargs.get('id'):
-                    obj = Blog.objects.get(id=id)
-                    form = BlogForm(request.POST, instance=obj)
-                    if form.is_valid():
-                        form.save()
-                        return redirect('/demo/list')
-    else:
-        raise PermissionDenied(Exception)
-    context={'form':form}
-    return render(request, 'update.html', context)
+# def update_blog(request,**kwargs):
+#     form = BlogForm()
+#     if request.user.is_authenticated and request.user.has_perm('blog.change_blog'):
+#         if request.method == 'POST':
+#             if id:= kwargs.get('id'):
+#                     obj = Blog.objects.get(id=id)
+#                     form = BlogForm(request.POST, instance=obj)
+#                     if form.is_valid():
+#                         form.save()
+#                         return redirect('/demo/list')
+#     else:
+#         raise PermissionDenied(Exception)
+#     context={'form':form}
+#     return render(request, 'update.html', context)
 
 #Delete existing blog
-@permission_required('blog.delete_blog')
-def delete_blog(request,**kwargs):
-    if request.user.is_authenticated: 
-        if pk:=kwargs.get('pk'):
-            blogs = Blog.objects.get(pk=pk)
-            blogs.delete()
-    else:
-       raise PermissionDenied(Exception)
-    blog = Blog.objects.all()
-    context = {'blog':blog}
-    return render(request,'list.html',context)
+# @permission_required('blog.delete_blog')
+# def delete_blog(request,**kwargs):
+#     if request.user.is_authenticated: 
+#         if pk:=kwargs.get('pk'):
+#             blogs = Blog.objects.get(pk=pk)
+#             blogs.delete()
+#     else:
+#        raise PermissionDenied(Exception)
+#     blog = Blog.objects.all()
+#     context = {'blog':blog}
+#     return render(request,'list.html',context)
 
 #Adding new user
 def add_blog_user(request):
