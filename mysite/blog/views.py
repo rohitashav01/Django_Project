@@ -132,16 +132,9 @@ def add_blog_user(request):
     form = AddUserForm()
     #User Permissions
     if request.method == 'POST':
-        content_type = ContentType.objects.get(app_label = 'blog', model = 'blog')
-        permission = Permission.objects.get(
-            codename='view_blog',
-            name='Can view blog',
-            content_type = content_type
-        )
         username = request.POST.get('username')
         password = request.POST.get('password')
         new_user = User.objects.create_user(username, password=password)
-        new_user.user_permissions.add(permission)
         new_user.save()
         return redirect('home')
     return render(request,'new_user.html',{'form':form})

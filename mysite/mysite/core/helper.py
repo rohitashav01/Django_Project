@@ -40,10 +40,22 @@ def remove_from_cart_helper(request,**kwargs):
 def add_to_wishlist_helper(request,**kwargs):
     if id := kwargs.get('id'):
         data = Product.objects.get(id = id)
+        print(data.pk)
         wishlist = request.session.get('wishlist',[])
         wish_items = {'ID':data.pk,'Name':data.name,'Price':data.price,'Quantity':data.quantity}
-        
         wishlist.append(wish_items)
         request.session['wishlist'] = wishlist
-        print(request.session['wishlist'])
     return request.session['wishlist']
+
+
+def remove_from_wishlist_helper(request,**kwargs):
+    if id:=kwargs.get('pk'):
+        data = Product.objects.get(id=id)
+        for item in request.session['wishlist']:
+            if item['ID'] == data.pk:
+                wishlist = request.session.get('wishlist',[])
+                del wishlist
+                request.session['wishlist'] = wishlist
+            else:
+                print('Not found')
+    return request.session['wishlist'] 
