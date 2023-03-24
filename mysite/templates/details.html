@@ -80,6 +80,13 @@
     <div class="container">
       <div class="row gy-3">
         <!-- Left elements -->
+        {% for message in messages %}
+            <div class="alert {{message.tags}} alert-dismissible" role="alert">
+            {{message}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+           </div>
+        {% endfor %}
+
         <div class="col-lg-2 col-sm-4 col-4">
           <a href="https://mdbootstrap.com/" target="_blank" class="float-start">
             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR50kD6hLroEfjZs0lmapIbxTPbw5_3vcuqGMCWF79GSHsXVrLKdF040UbCyqdhBhPp5cw&usqp=CAU" height="60"/>
@@ -91,13 +98,14 @@
         <div class="order-lg-last col-lg-5 col-sm-8 col-8">
           <div class="d-flex float-end">
             {% if request.user.is_authenticated %}
-              <p>Welcome: {{request.user.username}}</p>
-              <a href="{% url 'show_wishlist' %}" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center"> <i class="fas fa-heart m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Wishlist</p> </a>
-              <a href="{% url 'cart' %}" class="border rounded py-1 px-3 nav-link d-flex align-items-center"> <i class="fas fa-shopping-cart m-1 me-md-2"></i><p class="d-none d-md-block mb-0">My cart</p> </a>
-              <a href="{% url 'logout' %}" class="border rounded py-1 px-3 nav-link d-flex align-items-center"> <i class="fas fa-shopping-cart m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Logout</p> </a>
+              <p class = "btn btn-info rounded-circle m-2"><b>Welcome</b> {{request.user.username}}</p>
+              <a href="{% url 'show_wishlist' %}" class="btn btn-outline-dark m-2 "> <i class="fas fa-heart m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Wishlist</p> </a>
+              <a href="{% url 'cart' %}" class="btn btn-outline-dark m-2 "> <i class="fas fa-shopping-cart m-1 me-md-2"></i><p class="d-none d-md-block mb-0">My cart</p> </a>
+              <a href="{% url 'logout' %}" class="btn btn-outline-dark m-2 "> <i class="fas fa-shopping-cart m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Logout</p> </a>
+              <a href="#" class="btn btn-outline-dark m-2 "> <i class="fas fa-shopping-cart m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Profile</p> </a>
             {% else %}
-              <a href="{% url 'adduser' %}" class="border rounded py-1 px-3 nav-link d-flex align-items-center"> <i class="fas fa-shopping-cart m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Register</p> </a>
-              <a href="{% url 'loginuser' %}" class="border rounded py-1 px-3 nav-link d-flex align-items-center"> <i class="fas fa-shopping-cart m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Login</p></a>
+              <a href="{% url 'adduser' %}" class="btn btn-outline-dark m-2"> <i class="fas fa-shopping-cart m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Register</p> </a>
+              <a href="{% url 'loginuser' %}" class="btn btn-outline-dark m-2"> <i class="fas fa-shopping-cart m-1 me-md-2"></i><p class="d-none d-md-block mb-0">Login</p></a>
             {% endif %}
           </div>
         </div>

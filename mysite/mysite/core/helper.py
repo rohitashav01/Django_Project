@@ -7,16 +7,18 @@ def add_to_cart_helper(request,**kwargs):
         data = Product.objects.get(id = id)
         cart = request.session.get('cart',[])
         cart_items = {'ID':data.pk,'Name':data.name,'Price':data.price,'Quantity':1}
+        
         if cart != []:
             for i in cart:
                 if i['ID'] == data.pk:
                     print(i['ID'])
                     i['Quantity'] += 1
                     print('this is from if')
-                else:
-                    print('this is from else')
-                    cart.append(cart_items)       
+                else: 
+                    print('==============else of for')
+                    cart.append(cart_items)
         else:
+            print('=============== else of if')
             cart.append(cart_items)
         request.session['cart'] = cart
     return request.session['cart']
@@ -26,7 +28,6 @@ def remove_from_cart_helper(request,**kwargs):
     if id:=kwargs.get('pk'):
         data = Product.objects.get(id=id)
         for item in request.session['cart']:
-            #import pdb;pdb.set_trace()
             if item['ID'] == data.pk:
                 cart = request.session.get('cart',[])
                 cart.remove(item)
@@ -39,7 +40,7 @@ def remove_from_cart_helper(request,**kwargs):
 
 def add_to_wishlist_helper(request,**kwargs):
     if id := kwargs.get('id'):
-        data = Product.objects.get(id = id)
+        data = Product.objects.get(id=id)
         print(data.pk)
         wishlist = request.session.get('wishlist',[])
         wish_items = {'ID':data.pk,'Name':data.name,'Price':data.price,'Quantity':data.quantity}

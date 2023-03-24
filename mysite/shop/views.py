@@ -74,23 +74,27 @@ def user_address(request):
             print(instance.user_id)
             instance.save()
             return redirect('prod_detail')
-    else:
-        obj = Address.objects.get(user_id = request.user.id)
-    return render(request,'ecom/address.html',{'form':form,'obj':obj})
+    return render(request,'ecom/address.html',{'form':form})
 
-def get_address(request):
-    cart = request.session['cart']
-    total = sum(int(p['Price']) * p['Quantity']  for  p in cart)
-    data = Address.objects.filter(user_id = request.user.id)
-    return render(request,'ecom/checkout.html',{'data':data,'total':total})
 
 #wishlist
 def add_wishlist(request,**kwargs):
     if id:=kwargs.get('id'):
         obj = Product.objects.get(id = id)
-        Wishlist.objects.create(items = obj,user_id = request.user.id)
+        print("===================>")
+        print(obj)
+        if Wishlist.objects.filter(items_id = obj).exists():
+            messages.error(request,'Item already in wishlist')
+        else:
+            Wishlist.objects.create(items = obj,user_id = request.user.id)
         return redirect('prod_detail')
 
+#remove from wishlist
+def remove_from_wishlist(request,**kwargs):
+        if id := kwargs.get('id'):
+            obj = Wishlist.objects.get(id = id)
+            obj.delete()
+            return redirect('show_wishlist')
 #show wishlist
 def show_wishlist(request):
     data = Wishlist.objects.filter(user_id = request.user.id)
@@ -109,27 +113,40 @@ def remove_from_cart(request,**kwargs):
     return render(request,'cart.html',{'var':var})
 
 
-#cart details
+# Getting cart details
 def cart_details(request):
     cart = Product.objects.all()
     return render(request,'cart.html',{'cart':cart})
 
-
-def place_order(request):
+#Placcing an order
+def place_order(request,address_id):
     cart = request.session['cart']
-    # shipping_address = Address.objects.filter(user_id = request.user.id)
-    shipping_address_select_form = ShippingAddressSelectForm(user = request.user)
-    if request.method == 'POST':
-        shipping_address = shipping_address_select_form.cleaned_data['shipping_address']
-    print(shipping_address)
+    shipping_address = Address.objects.get(id = address_id)
     product = request.session.get('cart',[])
     for p in cart:
         sum = int(p['Price']*p['Quantity'])
-        order = Order.objects.create(user_id = request.user.id, address = shipping_address,total = sum,product_id = p['ID'])
+        Order.objects.create(user_id = request.user.id, address = shipping_address,total = sum,product_id = p['ID'])
         messages.success(request,'Order placed successfully')
     del cart
-    return render(request,'ecom/checkout.html',{'shipping_address_select_form':shipping_address_select_form})    
+  
 
+#Selecting address during checkout
+def get_address(request):
+    cart = request.session['cart']
+    total = sum(int(p['Price']) * p['Quantity']  for  p in cart)
+    data = Address.objects.filter(user_id = request.user.id)
+    if request.method == 'POST':
+        if 'data' in request.POST:
+            data = request.POST['data']
+            print(data)
+            place_order(request,data)
+            return redirect('addr_details')
+        else:
+            messages.error(request,'Please select an address')
+    return render(request,'ecom/checkout.html',{'data':data,'total':total})
+
+
+#Getting Past Orders
 def past_orders(request):
     obj = Order.objects.filter(user_id = request.user.id)
     return render(request,'ecom/past_orders.html',{'obj':obj})

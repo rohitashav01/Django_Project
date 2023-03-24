@@ -9,7 +9,7 @@
  
      <title>Order History</title>
      <style>
-             @media (min-width: 1025px) {
+          @media (min-width: 1025px) {
              .h-custom {
               height: 100vh !important;
              }
@@ -75,14 +75,14 @@
                                    <h6 class="text-muted">{{i.product.name}}</h6>
                                  </div>
                                  <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                                   <h6 class="mb-0">${{i.product.price}}</h6>
-                                 </div>
-                                 <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                                    <h6 class="mb-0">${{i.total}}</h6>
+                                  <h6 class="mb-0">${{i.product.price}}</h6>
+                                </div>
+                                <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                  <h6 class="mb-0">{{i.product.quantity}}</h6>
+                                </div>
+                                  <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                    <h6 class="mb-0">Total: ${{i.total}}</h6>
                                   </div>
-                                 <div class="col-md-6">
-                                     <a href = "/remove/{{item.ID}}" class="w-5 btn btn-primary me-3">Remove From Cart</a>
-                                 </div>
                                  <div class="col-md-1 col-lg-1 col-xl-1 text-end">
                                    <a href="#!" class="text-muted"><i class="fas fa-times"></i></a>
                                  </div>

@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from blog.views import BlogView,BlogUpdate
 from blog.views import list_blogs,add_blog_user,user_login,user_logout,home_page,publish_blog,change_password
-from shop.views import add_product,add_to_cart,remove_from_cart,add_wishlist,add_user,login_user,user_address,user_logout,cart_details,get_address,show_wishlist,place_order,past_orders,listing
+from shop.views import add_product,add_to_cart,remove_from_cart,add_wishlist,add_user,login_user,user_address,user_logout,cart_details,get_address,show_wishlist,past_orders,listing,remove_from_wishlist
 
 urlpatterns = [
     path('',home_page,name='home'),
@@ -35,6 +35,7 @@ urlpatterns = [
     path('shop/<int:id>',add_to_cart,name='add_cart'),
     path('remove/<int:pk>',remove_from_cart,name='remove'),
     path('shop/<int:id>/wishlist',add_wishlist,name='wishlist'),
+    path('shop/<int:id>/remove',remove_from_wishlist,name='remove-wishlist'),
     path('wishlist',show_wishlist,name='show_wishlist'),
     path('adduser',add_user,name='adduser'),
     path('loginuser',login_user,name='loginuser'),
@@ -42,7 +43,6 @@ urlpatterns = [
     path('logout',user_logout,name = 'logout'),
     path('cart',cart_details,name = 'cart'),
     path('address/details',get_address,name = 'addr_details'),
-    path('order-placed',place_order,name="place-order"),
     path('past-orders',past_orders,name="past-order"),
     path('listing',listing,name="prod_detail"),
 ]

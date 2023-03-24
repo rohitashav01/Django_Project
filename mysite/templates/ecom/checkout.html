@@ -19,6 +19,12 @@
       {% if request.user.is_authenticated %}
         <a href = "{% url 'prod_detail' %}" class = "btn btn-primary mt-10">Home</a>
       {% endif %}
+      {% for message in messages %}
+        <div class="alert {{message.tags}} alert-dismissible" role="alert">
+        {{message}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
         <div class="container py-5 h-100">
           <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col">
@@ -26,11 +32,7 @@
                 <div class="card-body p-4">
                   <div class="row">
                     <div class="col-lg-7">
-                      {% if messages %}
-                        {% for message in messages %}
-                          <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                        {% endfor %}
-                      {% endif %}
+                      
                       <h5 class="mb-3"><a href="#!" class="text-body"><i
                             class="fas fa-long-arrow-alt-left me-2"></i>Continue shopping</a></h5>
                       <hr>
@@ -91,18 +93,18 @@
                             </div>
                           </button>
                             <h2 style = 'margin: 10px;'><b>Select Address</b></h2>
-                            {% for d in data %}
-                              <div class = "d-flex flex-row">
-                                <p>{{d.address}},{{d.city}},{{d.state}},{{d.country}},{{d.zipcode}}</p>
-                              </div>
-                            {% endfor %}
-                            <form method="POST">
+                            <form method = 'POST'>
                               {% csrf_token %}
-                              {{ shipping_address_select_form.as_p }}
-                              <button type="submit">Continue to Payment</button>
-                          </form>
+                              {% for d in data %}
+                                <div class = "d-flex flex-row">
+                                  <input type = 'radio' name = 'data' value = {{d.id}}> 
+                                  <p>{{d.address}},{{d.city}},{{d.state}},{{d.country}},{{d.zipcode}}</p>
+                                </div>
+                              {% endfor %}
+                              <input type = 'submit' class = 'btn btn-success m-10' value = "Place Order"> 
+                            </form>   
                         </div>
-                        <a href="{% url 'place-order' %}" class = 'btn btn-success m-10'>Place Order</a> 
+                        
                       </div>
                     </div>
                   </div>
