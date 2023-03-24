@@ -69,7 +69,6 @@
                     <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
       
                       <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Add Shipping Details</p>
-                    {% if request.method.POST %}
                      <form action="" method="post">
                         {% csrf_token %}
                         <form class="mx-1 mx-md-4">
@@ -112,8 +111,6 @@
                             <button type="submit" class="btn btn-success">Save Details</button>
                         </form>
                       </form>
-                      {% else %}
-                        <p>Address: {{obj.address}}</p>
                       <br>
                     </div>
                     <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">

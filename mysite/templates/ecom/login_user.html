@@ -41,9 +41,11 @@
       <!-- Collapsible wrapper -->
     </div>
     <div class="d-flex align-items-center">
+      {% if request.user.is_authenticated %}
         <a href = "{% url 'prod_detail' %}" type="button" class="btn btn-primary me-3 btn-circle">
             Home
         </a>
+      {% endif %}
     </div>
     <!-- Container wrapper -->
   </nav>
@@ -56,7 +58,11 @@
                 <div class="card-body p-md-5">
                   <div class="row justify-content-center">
                     <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
-      
+                      {% if messages %}
+                        {% for message in messages %}
+                          <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                        {% endfor %}
+                      {% endif %}
                       <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Login</p>
                      <form action="" method="post">
                         {% csrf_token %}
@@ -77,7 +83,7 @@
                                 <label class="form-label" for="form3Example3c">Password</label>
                             </div>
                             </div>
-                            <button type="submit" class="btn btn-success">Submit</button>
+                            <button type="submit" class="btn btn-success">Login</button>
                         </form>
                       </form>
                       <br>

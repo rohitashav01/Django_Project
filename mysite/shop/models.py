@@ -34,4 +34,5 @@ class Order(models.Model):
     user = models.ForeignKey(ProfileUser,on_delete=models.CASCADE)
     product = models.ForeignKey(Product,on_delete=models.CASCADE)
     address = models.ForeignKey(Address,on_delete=models.CASCADE)
+    total = models.CharField(max_length=200)
     ordered_at = models.DateTimeField(auto_now=True)

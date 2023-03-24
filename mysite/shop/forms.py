@@ -61,3 +61,12 @@ class AddressForm(forms.ModelForm):
                 'placeholder': 'Zip'
                 }),
         }
+
+
+class ShippingAddressSelectForm(forms.Form):
+    shipping_address = forms.ModelChoiceField(queryset=Address.objects.all())
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user')
+        super().__init__(*args, **kwargs)
+        self.fields['shipping_address'].queryset = Address.objects.filter(user = user)

@@ -1,10 +1,11 @@
 from django.shortcuts import render,redirect,reverse,HttpResponse
-from .models import Product,ProfileUser,Address,Wishlist
-from shop.forms import ProdForm,NewUserForm,AddressForm
+from .models import Product,ProfileUser,Address,Wishlist,Order
+from shop.forms import ProdForm,NewUserForm,AddressForm,ShippingAddressSelectForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 from mysite.core.helper import add_to_cart_helper,remove_from_cart_helper,add_to_wishlist_helper,remove_from_wishlist_helper
+from django.core.paginator import Paginator
 # Create your views here.
 
 # def add_user(request):
@@ -47,9 +48,9 @@ def login_user(request):
         user = authenticate(request,username=username,password=password)
         if user is not None:
             login(request, user)
-            return redirect('prod_detail')
+            messages.success(request,'Login Successfully')
         else:
-            print("user does not exist")
+            messages.error(request,'Invalid Credentials or user does not exist')
     return render(request,'ecom/login_user.html',{})
 
 #User Logout
@@ -61,12 +62,6 @@ def user_logout(request):
     else:
         logout(request)
     return redirect("prod_detail")
-
-
-#Logout 
-def product_detail(request):
-    prod = Product.objects.all()
-    return render(request,'details.html',{'prod':prod})
 
 #Add User Address
 def user_address(request):
@@ -86,7 +81,7 @@ def user_address(request):
 def get_address(request):
     cart = request.session['cart']
     total = sum(int(p['Price']) * p['Quantity']  for  p in cart)
-    data = Address.objects.get(user_id = request.user.id)
+    data = Address.objects.filter(user_id = request.user.id)
     return render(request,'ecom/checkout.html',{'data':data,'total':total})
 
 #wishlist
@@ -98,9 +93,8 @@ def add_wishlist(request,**kwargs):
 
 #show wishlist
 def show_wishlist(request):
-    data = Wishlist.objects.get(user_id = request.user.id)
-    obj = Wishlist.objects.all(instance = data)
-    return render(request,'ecom/wishlist.html',{'obj':obj})
+    data = Wishlist.objects.filter(user_id = request.user.id)
+    return render(request,'ecom/wishlist.html',{'data':data})
 
 
 #helper functions
@@ -119,3 +113,31 @@ def remove_from_cart(request,**kwargs):
 def cart_details(request):
     cart = Product.objects.all()
     return render(request,'cart.html',{'cart':cart})
+
+
+def place_order(request):
+    cart = request.session['cart']
+    # shipping_address = Address.objects.filter(user_id = request.user.id)
+    shipping_address_select_form = ShippingAddressSelectForm(user = request.user)
+    if request.method == 'POST':
+        shipping_address = shipping_address_select_form.cleaned_data['shipping_address']
+    print(shipping_address)
+    product = request.session.get('cart',[])
+    for p in cart:
+        sum = int(p['Price']*p['Quantity'])
+        order = Order.objects.create(user_id = request.user.id, address = shipping_address,total = sum,product_id = p['ID'])
+        messages.success(request,'Order placed successfully')
+    del cart
+    return render(request,'ecom/checkout.html',{'shipping_address_select_form':shipping_address_select_form})    
+
+def past_orders(request):
+    obj = Order.objects.filter(user_id = request.user.id)
+    return render(request,'ecom/past_orders.html',{'obj':obj})
+
+#Pagination
+def listing(request):
+    prod_list = Product.objects.all()
+    paginator = Paginator(prod_list, 4) 
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'details.html', {'prod': page_obj})

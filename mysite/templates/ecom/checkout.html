@@ -16,15 +16,21 @@
 </head>
 <body>
     <section class="h-100 h-custom" style="background-color: #eee;">
+      {% if request.user.is_authenticated %}
+        <a href = "{% url 'prod_detail' %}" class = "btn btn-primary mt-10">Home</a>
+      {% endif %}
         <div class="container py-5 h-100">
           <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col">
               <div class="card">
                 <div class="card-body p-4">
-      
                   <div class="row">
-      
                     <div class="col-lg-7">
+                      {% if messages %}
+                        {% for message in messages %}
+                          <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                        {% endfor %}
+                      {% endif %}
                       <h5 class="mb-3"><a href="#!" class="text-body"><i
                             class="fas fa-long-arrow-alt-left me-2"></i>Continue shopping</a></h5>
                       <hr>
@@ -68,90 +74,38 @@
                       </div>
                       {% endfor %}
                     </div>
-                    <div class="col-lg-5">
-      
-                      <div class="card bg-primary text-white rounded-3">
-                        <div class="card-body">
-                          <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h5 class="mb-0">Card details</h5>
-                            <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp"
-                              class="img-fluid rounded-3" style="width: 45px;" alt="Avatar">
-                          </div>
-      
-                          <p class="small mb-2">Card type</p>
-                          <a href="#!" type="submit" class="text-white"><i
-                              class="fab fa-cc-mastercard fa-2x me-2"></i></a>
-                          <a href="#!" type="submit" class="text-white"><i
-                              class="fab fa-cc-visa fa-2x me-2"></i></a>
-                          <a href="#!" type="submit" class="text-white"><i
-                              class="fab fa-cc-amex fa-2x me-2"></i></a>
-                          <a href="#!" type="submit" class="text-white"><i class="fab fa-cc-paypal fa-2x"></i></a>
-      
-                          <form class="mt-4">
-                            <div class="form-outline form-white mb-4">
-                              <input type="text" id="typeName" class="form-control form-control-lg" siez="17"
-                                placeholder="Cardholder's Name" />
-                              <label class="form-label" for="typeName">Cardholder's Name</label>
-                            </div>
-      
-                            <div class="form-outline form-white mb-4">
-                              <input type="text" id="typeText" class="form-control form-control-lg" siez="17"
-                                placeholder="1234 5678 9012 3457" minlength="19" maxlength="19" />
-                              <label class="form-label" for="typeText">Card Number</label>
-                            </div>
-      
-                            <div class="row mb-4">
-                              <div class="col-md-6">
-                                <div class="form-outline form-white">
-                                  <input type="text" id="typeExp" class="form-control form-control-lg"
-                                    placeholder="MM/YYYY" size="7" id="exp" minlength="7" maxlength="7" />
-                                  <label class="form-label" for="typeExp">Expiration</label>
-                                </div>
-                              </div>
-                              <div class="col-md-6">
-                                <div class="form-outline form-white">
-                                  <input type="password" id="typeText" class="form-control form-control-lg"
-                                    placeholder="&#9679;&#9679;&#9679;" size="1" minlength="3" maxlength="3" />
-                                  <label class="form-label" for="typeText">Cvv</label>
-                                </div>
-                              </div>
-                            </div>
-      
-                          </form>
-      
                           <hr class="my-4">
                           {% for item in request.session.cart %}
                           <div class="d-flex justify-content-between">
                             <p class="mb-2">Subtotal</p>
                             <p class="mb-2">${{item.Price}}</p>
                           </div>
-                          
-      
-      
                           <div class="d-flex justify-content-between mb-4">
                             <p class="mb-2">Total(Incl. taxes)</p>
                             <p class="mb-2">{{total}}</p>
                           </div>
-                          
                           {% endfor %}
                           <button type="button" class="btn btn-info btn-block btn-lg">
                             <div class="d-flex justify-content-between">
                               <span>Continue to Pay <i class="fas fa-long-arrow-alt-right ms-2"></i></span>
                             </div>
                           </button>
-                            <h2 style = 'margin: 10px;'><b>Shippping Details</b></h2>
-                            <p><b>Address</b>{{data.address}}</p>
-                            <p><b>City:</b> {{data.city}}</p>
-                            <p><b>State: </b>{{data.state}}</p>
-                            <p><b>Country:</b> {{data.country}}</p>
-                            <p><b>Zipcode:</b> {{data.zipcode}}</p>
+                            <h2 style = 'margin: 10px;'><b>Select Address</b></h2>
+                            {% for d in data %}
+                              <div class = "d-flex flex-row">
+                                <p>{{d.address}},{{d.city}},{{d.state}},{{d.country}},{{d.zipcode}}</p>
+                              </div>
+                            {% endfor %}
+                            <form method="POST">
+                              {% csrf_token %}
+                              {{ shipping_address_select_form.as_p }}
+                              <button type="submit">Continue to Payment</button>
+                          </form>
                         </div>
+                        <a href="{% url 'place-order' %}" class = 'btn btn-success m-10'>Place Order</a> 
                       </div>
-      
                     </div>
-      
                   </div>
-      
                 </div>
               </div>
             </div>
@@ -160,3 +114,436 @@
       </section>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
