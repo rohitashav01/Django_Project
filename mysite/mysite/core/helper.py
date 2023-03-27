@@ -7,7 +7,6 @@ def add_to_cart_helper(request,**kwargs):
         data = Product.objects.get(id = id)
         cart = request.session.get('cart',[])
         cart_items = {'ID':data.pk,'Name':data.name,'Price':data.price,'Quantity':1,'Image':data.image.url}
-        
         if cart != []:
             for i in cart:
                 if i['ID'] == data.pk:

@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,reverse,HttpResponse,get_object_or_404
-from .models import Product,ProfileUser,Address,Wishlist,Order
-from shop.forms import ProdForm,NewUserForm,AddressForm,ShippingAddressSelectForm
+from .models import Product,ProfileUser,Address,Wishlist,Order,OrderItem
+from shop.forms import ProdForm,NewUserForm,AddressForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
@@ -33,7 +33,7 @@ def add_product(request):
 def add_user(request):
     form = NewUserForm
     if request.method == 'POST':
-        form = NewUserForm(request.POST)
+        form = NewUserForm(request.POST,request.FILES)
         if form.is_valid():
             form.save()
             return redirect('prod_detail')
@@ -118,19 +118,24 @@ def cart_details(request):
     cart = Product.objects.all()
     return render(request,'cart.html',{'cart':cart})
 
-#Placcing an order
+#Ordered Items
 def place_order(request,address_id):
     cart = request.session['cart']
     shipping_address = Address.objects.get(id = address_id)
-    product = request.session.get('cart',[])
-    for p in cart:
-        sum = int(p['Price']*p['Quantity'])
-        Order.objects.create(user_id=request.user.id, address=shipping_address, total=sum, product_id=p['ID'])
-        messages.success(request,'Order placed successfully')
-    del cart
+    total_order = sum(int(p['Price']*p['Quantity']) for p in cart)
+    print("================> Order Order")
+    var = Order.objects.create(user_id=request.user.id, address=shipping_address, total_order=total_order)
+    order_items(request,var.pk)
+    messages.success(request,'Order placed successfully')
+    
+def order_items(request,o_id):
+    cart = request.session['cart']
+    print("================> Order Item")
+    for i in cart:
+        total = int(i['Price']*i['Quantity'])
+        OrderItem.objects.create(product_id=i['ID'],total=total,order_id=o_id)
   
-
-#Selecting address during checkout
+#Selecting address during checkout  
 def get_address(request):
     cart = request.session['cart']
     total = sum(int(p['Price']) * p['Quantity']  for  p in cart)
@@ -174,3 +179,18 @@ def listing(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, 'details.html', {'prod': page_obj})
+
+#user profile
+def user_profile(request):
+    return render(request,'ecom/userprofile.html',{})
+
+def edit_profile(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        new_password = request.POST['new_password']
+        u = ProfileUser.objects.get(username=username)
+        u.set_password(new_password)    
+        u.save()
+        messages.success(request,'Password Changed')
+        return redirect('prod_detail')
+    return render(request,'ecom/editprofile.html',{})

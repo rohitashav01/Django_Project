@@ -13,15 +13,6 @@
     <div class="container">
       <!-- Navbar brand -->
       <a class="navbar-brand me-2" href="https://www.netsolutions.com/">
-        <img
-          src="https://mir-s3-cdn-cf.behance.net/projects/404/c47526102644041.Y3JvcCw0MDAxLDMxMjksMCw0MzU.jpg"
-          alt="Blood Donor System Image"
-          height="80"
-          width="200"
-          loading="lazy"
-          style="margin-top: -1px;margin-left:-250px;"
-          class = "rounded-circle"
-        />
       </a>
       <h3>getNbuy</h3>
       <!-- Toggle button -->
@@ -67,7 +58,7 @@
                     <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
       
                       <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">SignUp to Buy</p>
-                     <form action="" method="post">
+                     <form action="" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <form class="mx-1 mx-md-4">
         
@@ -99,6 +90,13 @@
                                 <label class="form-label" for="form3Example3c">Enter a New Password</label>
                             </div>
                             </div>
+                            <div class="d-flex flex-row align-items-center mb-4">
+                              <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
+                              <div class="form-outline flex-fill mb-0">
+                                  {{form.image}}
+                                  <label class="form-label" for="form3Example3c">Upload Your Image</label>
+                              </div>
+                              </div>
                             <button type="submit" class="btn btn-success">Register</button>
                         </form>
                       </form>

@@ -1,7 +1,7 @@
 
 from django import forms
 from shop.models import Product,ProfileUser,Address
-from django.forms import ModelForm, TextInput, EmailInput, PasswordInput,Select,CheckboxInput
+from django.forms import ModelForm, TextInput, EmailInput, PasswordInput,Select,CheckboxInput,ImageField
 
 class ProdForm(forms.ModelForm):
     class Meta:
@@ -18,7 +18,7 @@ class NewUserForm(forms.ModelForm):
         return user
     class Meta:
         model = ProfileUser
-        fields = ['username','age','email','password']
+        fields = ['username','age','email','password','image']
         widgets = {
             'username': TextInput(attrs={
                 'class': "form-control",
@@ -63,10 +63,3 @@ class AddressForm(forms.ModelForm):
         }
 
 
-class ShippingAddressSelectForm(forms.Form):
-    shipping_address = forms.ModelChoiceField(queryset=Address.objects.all())
-
-    def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user')
-        super().__init__(*args, **kwargs)
-        self.fields['shipping_address'].queryset = Address.objects.filter(user = user)

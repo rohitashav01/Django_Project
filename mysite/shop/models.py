@@ -26,6 +26,7 @@ class ProfileUser(AbstractUser):
     username = models.CharField(max_length=20)
     age = models.IntegerField(blank = True,null=True)
     email = models.EmailField(max_length=254, unique=True)
+    image = models.ImageField(upload_to='images/',null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username','first_name','last_name']
@@ -44,9 +45,15 @@ class Wishlist(models.Model):
     user = models.ForeignKey(ProfileUser,on_delete = models.CASCADE)
 
 
-class Order(models.Model):
+class Order(models.Model):  
     user = models.ForeignKey(ProfileUser,on_delete=models.CASCADE)
-    product = models.ForeignKey(Product,on_delete=models.CASCADE)
+    total_order = models.CharField(max_length=1000,null=True)
     address = models.ForeignKey(Address,on_delete=models.CASCADE)
+    ordered_at = models.DateTimeField(auto_now=True)
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order,on_delete=models.CASCADE)
+    product = models.ForeignKey(Product,on_delete=models.CASCADE)
     total = models.CharField(max_length=200)
     ordered_at = models.DateTimeField(auto_now=True)
+
