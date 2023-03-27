@@ -1,58 +1,3 @@
-<!-- <section class="h-100 h-custom" style="background-color: #eee;">
-  <div class="container py-5 h-100">
-    <div class="row d-flex justify-content-center align-items-center h-100">
-      <div class="col">
-        <div class="card">
-          <div class="card-body p-4">
-
-            <div class="row">
-
-              <div class="col-lg-7">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                  <div>
-                    <p class="mb-1">Availaible Products</p>
-                  </div>
-                </div>
-                <div>
-                  {% for p in prod %}
-                  <div class="card mb-3 w-100">
-                      <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                          <div class="d-flex flex-row align-items-center">
-                            <div>
-                              <img
-                                src="https://fdn2.gsmarena.com/vv/pics/sony/sony-xperia-1-1.jpg"
-                                class="img-fluid rounded-3" alt="Shopping item" style="width: 65px;">
-                            </div>
-                            <div class="ms-3">
-                              <h5>{{p.name}}</h5>
-                            </div>
-                          </div>
-                          <div class="d-flex flex-row align-items-center">
-                            <div style="width: 70px;">
-                              <h5 class="fw-normal mb-0">{{p.quantity}}</h5>
-                            </div>
-                            <div style="width: 90px;">
-                              <h5 class="mb-0">RS.{{p.price}}</h5>
-                            </div>
-                            <a href = '/shop/{{p.id}}' class="btn btn-primary me-3">Add To Cart</a> 
-                            <a href="#!" style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
- -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -88,7 +33,7 @@
         {% endfor %}
 
         <div class="col-lg-2 col-sm-4 col-4">
-          <a href="https://mdbootstrap.com/" target="_blank" class="float-start">
+          <a href="#" target="_blank" class="float-start">
             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR50kD6hLroEfjZs0lmapIbxTPbw5_3vcuqGMCWF79GSHsXVrLKdF040UbCyqdhBhPp5cw&usqp=CAU" height="60"/>
           </a>
         </div>
@@ -236,137 +181,12 @@
     </header>
 
     <div class="row">
-      <div class="col-lg-3 col-md-6 col-sm-6">
-        <div class="card my-2 shadow-0">
-          <a href="#" class="img-wrap">
-            <div class="mask" style="height: 50px;">
-              <div class="d-flex justify-content-start align-items-start h-100 m-2">
-                <h6><span class="badge bg-success pt-2">Offer</span></h6>
-              </div>
-            </div>
-            <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/12.webp" class="card-img-top" style="aspect-ratio: 1 / 1"> 
-          </a>
-          <div class="card-body p-0 pt-3">
-            <a href="#!" class="btn btn-light border px-2 pt-2 float-end icon-hover"><i class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
-            <h5 class="card-title">$29.95</h5>
-            <p class="card-text mb-0">GoPro action camera 4K</p>
-            <p class="text-muted">
-              Model: X-200
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-3 col-md-6 col-sm-6">
-        <div class="card my-2 shadow-0">
-          <a href="#" class="img-wrap"> 
-            <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/11.webp" class="card-img-top" style="aspect-ratio: 1 / 1"> 
-          </a>
-          <div class="card-body p-0 pt-2">
-            <a href="#!" class="btn btn-light border px-2 pt-2 float-end icon-hover"><i class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
-            <h5 class="card-title">$590.00</h5>
-            <p class="card-text mb-0">Canon EOS professional</p>
-            <p class="text-muted">
-              Capacity: 128GB
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-3 col-md-6 col-sm-6">
-        <div class="card my-2 shadow-0">
-          <a href="#" class="img-wrap"> 
-            <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/10.webp" class="card-img-top" style="aspect-ratio: 1 / 1"> 
-          </a>
-          <div class="card-body p-0 pt-2">
-            <a href="#!" class="btn btn-light border px-2 pt-2 float-end icon-hover"><i class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
-            <h5 class="card-title">$29.95</h5>
-            <p class="card-text mb-0">Modern product name here</p>
-            <p class="text-muted">
-              Sizes: S, M, XL
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-3 col-md-6 col-sm-6">
-        <div class="card my-2 shadow-0">
-          <a href="#" class="img-wrap"> 
-            <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/9.webp" class="card-img-top" style="aspect-ratio: 1 / 1"> 
-          </a>
-          <div class="card-body p-0 pt-2">
-            <a href="#!" class="btn btn-light border px-2 pt-2 float-end icon-hover"><i class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
-            <h5 class="card-title">$1099.00</h5>
-            <p class="card-text mb-0">Apple iPhone 13 Pro max</p>
-            <p class="text-muted">
-              Color: Black, Memory: 128GB
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-3 col-md-6 col-sm-6">
-        <div class="card my-2 shadow-0">
-          <a href="#" class="img-wrap"> 
-            <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/5.webp" class="card-img-top" style="aspect-ratio: 1 / 1"> 
-          </a>
-          <div class="card-body p-0 pt-2">
-            <a href="#!" class="btn btn-light border px-2 pt-2 float-end icon-hover"><i class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
-            <h5 class="card-title">$29.95</h5>
-            <p class="card-text mb-0">Modern product name here</p>
-            <p class="text-muted">
-              Sizes: S, M, XL
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-3 col-md-6 col-sm-6">
-        <div class="card my-2 shadow-0">
-          <a href="#" class="img-wrap"> 
-            <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/6.webp" class="card-img-top" style="aspect-ratio: 1 / 1"> 
-          </a>
-          <div class="card-body p-0 pt-2">
-            <a href="#!" class="btn btn-light border px-2 pt-2 float-end icon-hover"><i class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
-            <h5 class="card-title">$29.95</h5>
-            <p class="card-text mb-0">Modern product name here</p>
-            <p class="text-muted">
-              Model: X-200
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-3 col-md-6 col-sm-6">
-        <div class="card my-2 shadow-0">
-          <a href="#" class="img-wrap"> 
-            <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/7.webp" class="card-img-top" style="aspect-ratio: 1 / 1"> 
-          </a>
-          <div class="card-body p-0 pt-2">
-            <a href="#!" class="btn btn-light border px-2 pt-2 float-end icon-hover"><i class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
-            <h5 class="card-title">$29.95</h5>
-            <p class="card-text mb-0">Modern product name here</p>
-            <p class="text-muted">
-              Sizes: S, M, XL
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-3 col-md-6 col-sm-6">
-        <div class="card my-2 shadow-0">
-          <a href="#" class="img-wrap"> 
-            <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/8.webp" class="card-img-top" style="aspect-ratio: 1 / 1"> 
-          </a>
-          <div class="card-body p-0 pt-2">
-            <a href="#!" class="btn btn-light border px-2 pt-2 float-end icon-hover"><i class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
-            <h5 class="card-title">$29.95</h5>
-            <p class="card-text mb-0">Modern product name here</p>
-            <p class="text-muted">
-              Material: Jeans
-            </p>
-          </div>
-        </div>
-      </div>
       {% for p in prod %}
       <div class="col-lg-3 col-md-6 col-sm-6">
+        
         <div class="card my-2 shadow-0">
           <a href="#" class="img-wrap"> 
-            <img src="https://fdn2.gsmarena.com/vv/pics/sony/sony-xperia-1-1.jpg" class="card-img-top" style="aspect-ratio: 1 / 1"> 
-          </a>
+            <img src="{{ MEDIA_URL }}{{p.image.url}}" class="card-img-top" style="aspect-ratio: 1 / 1"> </a> 
           <div class="card-body p-0 pt-2">
             <a href="/shop/{{p.id}}/wishlist" class="btn btn-light border px-2 pt-2 float-end icon-hover">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16" id = "btn">
@@ -377,13 +197,14 @@
             <h5 class="card-title">${{p.price}}</h5>
             <p class="card-text mb-0">{{p.name}}</p>
             <p class="text-muted">
-              Material: Electronics
+              Category: {{p.category}}
             </p>
             <p>In Stock: {{p.quantity}}</p>
           </div>
           {% if request.user.is_authenticated %}
-            <a href='/shop/{{p.id}}' class="btn btn-primary me-3">Add To Cart</a> 
+            <a href='/shop/{{p.id}}' class="btn btn-primary m-1">Add To Cart</a> 
           {% endif %}
+          <a href="{% url 'details' p.id %}" class="btn btn-dark m-1">Details</a>
         </div>
       </div>
       {% endfor %}

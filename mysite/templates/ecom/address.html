@@ -55,7 +55,7 @@
     </div>
     <!-- Container wrapper -->
     {% if request.user.is_authenticated %}
-        <h4>WELCOME: {{request.user.username}}</h4>
+        <h4>WELCOME {{request.user.username}}</h4>
     {% endif %}
   </nav>
   <!-- Navbar -->

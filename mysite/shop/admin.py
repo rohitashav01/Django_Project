@@ -3,7 +3,7 @@ from .models import Product,ProfileUser,Address,Wishlist,Order
 
 # Register your models here.
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['name','price','quantity']
+    list_display = ['name','price','quantity','category','image']
 
 admin.site.register(Product,ProductAdmin)
 admin.site.register(ProfileUser)

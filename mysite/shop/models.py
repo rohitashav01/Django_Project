@@ -3,10 +3,24 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
+CATEGORY_CHOICES = [
+    ('books','BOOKS'),
+    ('toys','TOYS'),
+    ('mobile','MOBILE'),
+    ('nutrition','NUTRITION'),
+    ('kitchen','KITCHEN'),
+    ('laptop','LAPTOP'),
+    ('clothes','CLOTHES'),
+    ('shoes','SHOES')
+
+]
+
 class Product(models.Model):
     name = models.CharField(max_length = 100)
     price = models.IntegerField()
     quantity = models.IntegerField()
+    category = models.CharField(max_length=20,choices=CATEGORY_CHOICES,default = 'mobile',blank=True, null=True)
+    image = models.ImageField(upload_to='images/')
 
 class ProfileUser(AbstractUser):
     username = models.CharField(max_length=20)

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 from django.contrib import messages
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,7 +26,8 @@ SECRET_KEY = 'django-insecure-a_14x)r1^a=0%72#@f)hta28oep@k&mbakz96p*l)-l-%65)r+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
+MEDIA_URL = '/media/'
+MEDIA_ROOT =  os.path.join(BASE_DIR, 'media/')
 ALLOWED_HOSTS = []
 
 MESSAGE_TAGS = {

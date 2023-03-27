@@ -17,7 +17,9 @@ from django.contrib import admin
 from django.urls import path
 from blog.views import BlogView,BlogUpdate
 from blog.views import list_blogs,add_blog_user,user_login,user_logout,home_page,publish_blog,change_password
-from shop.views import add_product,add_to_cart,remove_from_cart,add_wishlist,add_user,login_user,user_address,user_logout,cart_details,get_address,show_wishlist,past_orders,listing,remove_from_wishlist
+from shop.views import add_product,add_to_cart,remove_from_cart,add_wishlist,add_user,login_user,user_address,user_logout,cart_details,get_address,show_wishlist,past_orders,listing,remove_from_wishlist,product_detail
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('',home_page,name='home'),
@@ -45,4 +47,7 @@ urlpatterns = [
     path('address/details',get_address,name = 'addr_details'),
     path('past-orders',past_orders,name="past-order"),
     path('listing',listing,name="prod_detail"),
-]
+    path('details/<int:pk>',product_detail,name='details')
+
+    
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Detail</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-white">
+        <!-- Container wrapper -->
+        <div class="container">
+            <!-- Toggle button -->
+            <button 
+                class="navbar-toggler" 
+                type="button" 
+                data-mdb-toggle="collapse" 
+                data-mdb-target="#navbarSupportedContent1" 
+                aria-controls="navbarSupportedContent1" 
+                aria-expanded="false" 
+                aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+    
+            <!-- Collapsible wrapper -->
+            <div class="collapse navbar-collapse" id="navbarSupportedContent1">
+                <!-- Navbar brand -->
+                <a href="#" target="_blank" class="float-start">
+                    <img src="" height="60"/>
+                </a>
+                <!-- Left links -->
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'prod_detail' %}">Home</a>
+                    </li>
+                </ul>
+                <!-- Left links -->
+            </div>
+            <!-- Collapsible wrapper -->
+    </nav>
+    <!-- Navbar -->
+    
+    <!--Main layout-->
+    <main class="mt-5 pt-4">
+        <div class="container mt-5">
+            <!--Grid row-->
+            <div class="row">
+                <!--Grid column-->
+                <div class="col-md-6 mb-4">
+                    <img src="{{MEDIA_URL}}{{product.image.url}}" class="img-fluid" alt="" width="200" height="200" />
+                </div>
+                <!--Grid column-->
+    
+                <!--Grid column-->
+                <div class="col-md-6 mb-4">
+                    <!--Content-->
+                    <div class="p-4">
+                        <div class="mb-3">
+                            <a href="">
+                                <span class="badge bg-info me-1">New</span>
+                            </a>
+                            <a href="">
+                                <span class="badge bg-danger me-1">Bestseller</span>
+                            </a>
+                        </div>
+    
+                        <p class="lead">
+                            <span class="me-1">
+                                <del>$999</del>
+                            </span>
+                            <span>${{product.price}}</span>
+                        </p>
+                        <h5>{{product.name}}</h5>
+
+                        <strong><p style="font-size: 20px;">Description</p></strong>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Et dolor suscipit libero eos atque quia ipsa sint voluptatibus! Beatae sit assumenda asperiores iure at maxime atque repellendus maiores quia sapiente.</p>
+                        {% if request.user.is_authenticated %}
+                            <a href='/shop/{{product.id}}' class="btn btn-primary m-1">Add To Cart</a> 
+                         {% endif %}
+                    </div>
+                    <!--Content-->
+                </div>
+                <!--Grid column-->
+            </div>
+            <!--Grid row-->
+    
+            <hr />
+    
+            <!--Grid row-->
+            <div class="row d-flex justify-content-center">
+                <!--Grid column-->
+                <div class="col-md-6 text-center">
+                    <h4 class="my-4 h4">Related Products</h4>
+                </div>
+                <!--Grid column-->
+            </div>
+            <!--Grid row-->
+    
+            <!--Grid row-->
+            <div class="row">
+                <!--Grid column-->
+                {% for r in related_products %}
+                <div class="col-lg-4 col-md-12 mb-4">
+                    <a href="#" class="img-wrap"> 
+                        <img src="{{MEDIA_URL}}{{r.image.url}}" class="card-img-top" width="50" height="200" style="aspect-ratio: 1 / 1"> 
+                      </a>
+                      <p class="lead">
+                        <span class="me-1">
+                            <del>$999</del>
+                        </span>
+                        <span>${{r.price}}</span>
+                    </p>
+                    <h5>{{r.name}}</h5>
+                    <a href="{% url 'details' r.id %}" class="btn btn-dark m-1">Details</a>
+                </div>
+                {% endfor %}
+                <!--Grid column-->
+                <!--Grid column-->
+            </div>
+            <!--Grid row-->
+        </div>
+    </main>
+    <!--Main layout-->
+    
+    <!-- footer -->
+    <footer class="text-center text-white mt-4" style="background-color: #607d8b;">
+        <!--Call to action-->
+        <div class="pt-4 pb-2">
+            <a class="btn btn-outline-white btn-info" style="box-shadow: rgba(175, 0, 70, 0.15) 0px 5px 15px;" href="{% url 'prod_detail' %}" role="button">
+                getNbuy
+                <i class="fas fa-download ms-2"></i>
+            </a>
+        </div>
+        <!--/.Call to action-->
+    
+        <hr class="text-dark" />
+    
+        <div class="container">
+            <!-- Section: Social media -->
+            <section class="mb-3">
+                <!-- Facebook -->
+                <a class="btn-link btn-floating btn-lg text-white" href="#!" role="button" data-mdb-ripple-color="dark"><i class="fab fa-facebook-f"></i></a>
+    
+                <!-- Twitter -->
+                <a class="btn-link btn-floating btn-lg text-white" href="#!" role="button" data-mdb-ripple-color="dark"><i class="fab fa-twitter"></i></a>
+    
+                <!-- Google -->
+                <a class="btn-link btn-floating btn-lg text-white" href="#!" role="button" data-mdb-ripple-color="dark"><i class="fab fa-google"></i></a>
+    
+                <!-- Instagram -->
+                <a class="btn-link btn-floating btn-lg text-white" href="#!" role="button" data-mdb-ripple-color="dark"><i class="fab fa-instagram"></i></a>
+    
+                <!-- YouTube -->
+                <a class="btn-link btn-floating btn-lg text-white" href="#!" role="button" data-mdb-ripple-color="dark"><i class="fab fa-youtube"></i></a>
+                <!-- Github -->
+                <a class="btn-link btn-floating btn-lg text-white" href="#!" role="button" data-mdb-ripple-color="dark"><i class="fab fa-github"></i></a>
+            </section>
+            <!-- Section: Social media -->
+        </div>
+        <!-- Grid container -->
+    
+        <!-- Copyright -->
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2); text-color:#e0e0e0;">
+            © 2022 Copyright: getNbuy
+        </div>
+        <!-- Copyright -->
+    </footer>
+</body>
+</html>
