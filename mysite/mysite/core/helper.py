@@ -6,19 +6,18 @@ def add_to_cart_helper(request,**kwargs):
     if id := kwargs.get('id'):
         data = Product.objects.get(id = id)
         cart = request.session.get('cart',[])
-        cart_items = {'ID':data.pk,'Name':data.name,'Price':data.price,'Quantity':1,'Image':data.image.url}
-        if cart != []:
-            for i in cart:
-                if i['ID'] == data.pk:
-                    print(i['ID'])
-                    i['Quantity'] += 1
-                    print('this is from if')
-                else: 
-                    print('==============else of for')
-                    cart.append(cart_items)
-        else:
-            print('=============== else of if')
+        if cart == []:
+            cart_items = {'ID':data.pk,'Name':data.name,'Price':data.price,'Quantity':1,'Image':data.image.url}
             cart.append(cart_items)
+        else:
+            for i in cart:
+                if i['Id'] == data.pk:
+                    i['quantity'] += 1
+                    break
+
+            cart_items = {'ID':data.pk,'Name':data.name,'Price':data.price,'Quantity':1,'Image':data.image.url}
+            cart.append(cart_items)
+            
         request.session['cart'] = cart
     return request.session['cart']
 

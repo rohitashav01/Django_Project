@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect,reverse,HttpResponse,get_object_or_404
-from .models import Product,ProfileUser,Address,Wishlist,Order,OrderItem
+from .models import Product,ProfileUser,Address,Wishlist,Order,OrderItem,Tag
 from shop.forms import ProdForm,NewUserForm,AddressForm
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -19,15 +19,20 @@ from django.core.paginator import Paginator
 #     return render(request,'new_user.html',{'form':form})
 
 
-#adding a new user
+#adding a new product
 def add_product(request):
-    form = ProdForm
     if request.method == 'POST':
         form = ProdForm(request.POST,request.FILES)
         if form.is_valid():
-            prod = form.save()
+            prod = form.save(commit = False)
+            tags = request.POST.getlist('tags')
             prod.save()
+            prod.tags.set(tags)
+    else:
+        form = ProdForm()
     return render(request,'add.html', {'form': form})
+
+
 
 #adding a new user
 def add_user(request):
@@ -159,7 +164,8 @@ def past_orders(request):
 
 #get related products
 def get_related_products(product):
-    related_products = Product.objects.filter(category=product.category)
+    print(product.tags.tags__id)
+    related_products = Product.objects.filter()
     return related_products.exclude(id=product.id)
 
 #get details of the product
@@ -175,7 +181,7 @@ def product_detail(request, pk):
 #Pagination
 def listing(request):
     prod_list = Product.objects.all()
-    paginator = Paginator(prod_list, 8) 
+    paginator = Paginator(prod_list, 12) 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, 'details.html', {'prod': page_obj})

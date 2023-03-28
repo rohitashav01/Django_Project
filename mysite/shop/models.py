@@ -14,13 +14,19 @@ CATEGORY_CHOICES = [
     ('shoes','SHOES')
 
 ]
+class Tag(models.Model):
+    tagname = models.CharField(max_length=70)
 
+    def __str__(self):
+        return self.tagname
+       
 class Product(models.Model):
     name = models.CharField(max_length = 100)
     price = models.IntegerField()
     quantity = models.IntegerField()
     category = models.CharField(max_length=20,choices=CATEGORY_CHOICES,default = 'mobile',blank=True, null=True)
     image = models.ImageField(upload_to='images/')
+    tags = models.ManyToManyField(Tag)
 
 class ProfileUser(AbstractUser):
     username = models.CharField(max_length=20)

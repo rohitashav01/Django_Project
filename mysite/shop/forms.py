@@ -6,7 +6,7 @@ from django.forms import ModelForm, TextInput, EmailInput, PasswordInput,Select,
 class ProdForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['name','price','quantity','category','image']
+        fields = ['name','price','quantity','category','image','tags']
     
 class NewUserForm(forms.ModelForm):
     def save(self, commit=True):

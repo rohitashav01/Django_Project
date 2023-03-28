@@ -1,5 +1,9 @@
 <form method = "POST"  enctype="multipart/form-data">
     {% csrf_token %}
     {{form.as_div}}
+    {% for tag in tags %}
+        <input type="radio" name="tags" value="{{ tag.id }}"> 
+        <label>{{tag.tagname}}</label>
+    {% endfor %}
     <input type = 'submit' name = 'submit' style="color: black;margin-top: 20px" value="Submit">
 </form>
