@@ -17,7 +17,8 @@ from django.contrib import admin
 from django.urls import path
 from blog.views import BlogView,BlogUpdate
 from blog.views import list_blogs,add_blog_user,user_login,user_logout,home_page,publish_blog,change_password
-from shop.views import add_product,add_to_cart,remove_from_cart,add_wishlist,add_user,login_user,user_address,user_logout,cart_details,get_address,show_wishlist,past_orders,listing,remove_from_wishlist,product_detail,user_profile,edit_profile
+from shop.views import add_product,add_to_cart,remove_from_cart,add_wishlist,add_user,login_user,user_address,user_logout,cart_details,get_address,show_wishlist,past_orders,listing,remove_from_wishlist,product_detail,user_profile,edit_profile,get_all_products
+from shop import views
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -50,5 +51,21 @@ urlpatterns = [
     path('details/<int:pk>',product_detail,name='details'),
     path('profile',user_profile,name='profile'),
     path('edit-profile',edit_profile,name='edit-profile'),
-    
+
+    ####################################################
+    path('allproducts',get_all_products),
+    path('getprod/<int:pk>',views.get_product),
+    path('createprod/',views.create_product),
+    path('updateprod/<int:pk>',views.update_product),
+    path('updateprod/<int:pk>/partial_update',views.partial_update),
+    path('deleteprod/<int:pk>',views.delete_product),
+
+    path('loginuser',views.login_user),
+    path('logoutuser',views.logout_user),
+    path('getaddr',views.get_address),
+    path('createaddr',views.create_address),
+    path('updateaddr/<int:address_id>/edit',views.update_address),
+    path('partialaddr/<int:address_id>/edit',views.partial_update_address),
+    path('delete_addr/<int:address_id>/delete',views.delete_address),
+
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

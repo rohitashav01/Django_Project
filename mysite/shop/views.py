@@ -6,6 +6,16 @@ from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 from mysite.core.helper import add_to_cart_helper,remove_from_cart_helper,add_to_wishlist_helper,remove_from_wishlist_helper
 from django.core.paginator import Paginator
+
+###########################################
+from rest_framework.response import Response
+from rest_framework.decorators import api_view,permission_classes
+from rest_framework.serializers import ModelSerializer
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authtoken.models import Token
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework import status
 # Create your views here.
 
 # def add_user(request):
@@ -86,8 +96,6 @@ def user_address(request):
 def add_wishlist(request,**kwargs):
     if id:=kwargs.get('id'):
         obj = Product.objects.get(id = id)
-        print("===================>")
-        print(obj)
         if Wishlist.objects.filter(items_id = obj).exists():
             messages.error(request,'Item already in wishlist')
         else:
@@ -128,14 +136,12 @@ def place_order(request,address_id):
     cart = request.session['cart']
     shipping_address = Address.objects.get(id = address_id)
     total_order = sum(int(p['Price']*p['Quantity']) for p in cart)
-    print("================> Order Order")
     var = Order.objects.create(user_id=request.user.id, address=shipping_address, total_order=total_order)
     order_items(request,var.pk)
     messages.success(request,'Order placed successfully')
     
 def order_items(request,o_id):
     cart = request.session['cart']
-    print("================> Order Item")
     for i in cart:
         total = int(i['Price']*i['Quantity'])
         OrderItem.objects.create(product_id=i['ID'],total=total,order_id=o_id)
@@ -200,3 +206,146 @@ def edit_profile(request):
         messages.success(request,'Password Changed')
         return redirect('prod_detail')
     return render(request,'ecom/editprofile.html',{})
+
+
+
+################################################################API###############################################################
+class ProductSerializer(ModelSerializer):
+    class Meta:
+        model = Product
+        fields = "__all__"
+
+@api_view()
+
+def get_all_products(request):
+    products = Product.objects.all()
+    return Response({"products":ProductSerializer(products, many=True).data})
+
+#crud for products
+
+#get product
+@api_view(http_method_names=('get',))
+def get_product(request,pk):
+    prod = Product.objects.get(id=pk)
+    return Response({"product":ProductSerializer(prod).data})
+
+#create product
+@api_view(http_method_names=('post',))
+def create_product(request):
+    serializer = ProductSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    prod = Product.objects.all().last()
+    return Response({"new_product":ProductSerializer(prod).data})
+
+#update
+@api_view(http_method_names=('put',))
+def update_product(request,pk):
+    prod = Product.objects.get(id=pk)
+    serializer = ProductSerializer(prod, data=request.data)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response({"updated_product":ProductSerializer(prod).data})
+
+#partial_update
+@api_view(http_method_names=('patch',))
+def partial_update(request,pk):
+    prod = Product.objects.get(id=pk)   
+    serializer = ProductSerializer(prod, data=request.data, partial=True)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response({"updated_product":ProductSerializer(prod).data})
+
+#delete
+@api_view(http_method_names=('delete',))
+def delete_product(request,pk):
+    prod = Product.objects.get(id=pk)   
+    prod.delete()
+    return Response({"message":"product_deleted"})
+
+
+
+
+###################################################
+#crud for address
+class AddressSerializer(ModelSerializer):
+    class Meta:
+        model = Address
+        fields = "__all__"
+
+class ProfileSerializer(ModelSerializer):
+    class Meta:
+        model = ProfileUser
+        fields = "__all__"
+
+
+#get_address
+@csrf_exempt
+@api_view(http_method_names=('post',))
+def login_user(request):
+    email = request.data.get('email')
+    user_email = ProfileUser.objects.get(email=email)
+    serializer = ProfileSerializer(user_email)
+    password = request.data.get('password')
+    user = authenticate(email=email, password=password)
+    if user is not None:
+        login(request, user)
+        var = Token.objects.create(user=user_email)
+        return Response({"Message":serializer.data,"Token":var.key},status=status.HTTP_200_OK)
+    else:
+        return Response({"message:":"Invalid Credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+
+@api_view(http_method_names=('post',))
+@permission_classes([IsAuthenticated])
+def logout_user(request):
+    Token.objects.filter(user=request.user).delete()
+    logout(request)
+    return Response({"message":"User logged out!!!!!"})
+
+@api_view(http_method_names=('get',))
+@permission_classes([IsAuthenticated])
+def get_address(request):
+    address = Address.objects.filter(user_id=request.user.id)
+    return Response({"address":AddressSerializer(address,many=True).data})
+
+#create address
+@api_view(http_method_names=('post',))
+@permission_classes([IsAuthenticated])
+def create_address(request):
+    request.data["user"]=request.user.id
+    serializer = AddressSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    new_address = Address.objects.filter(user=request.user).last()
+    return Response({"new_address":AddressSerializer(new_address).data})
+
+#update address
+@api_view(http_method_names=('put',))
+@permission_classes([IsAuthenticated])
+def update_address(request,address_id):
+    request.data["user"]=request.user.id
+    address = get_object_or_404(Address, user_id=request.data["user"], id=address_id) 
+    serializer = AddressSerializer(address, data=request.data)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response({"updated_address":AddressSerializer(address).data})
+
+
+#partial update
+@api_view(http_method_names=('patch',))
+@permission_classes([IsAuthenticated])
+def partial_update_address(request,address_id):
+    request.data["user"]=request.user.id
+    address = get_object_or_404(Address, user_id=request.user.id, id=address_id)
+    serializer = AddressSerializer(address, data=request.data, partial=True)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response({"changed_address":AddressSerializer(address).data})
+
+#delete address
+@api_view(http_method_names=('delete',))
+def delete_address(request,address_id):
+    request.data["user"]=request.user.id
+    address = get_object_or_404(Address, user_id=request.user.id, id=address_id)
+    address.delete()
+    return Response({"message":"Address Deleted"})
