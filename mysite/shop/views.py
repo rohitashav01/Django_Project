@@ -6,16 +6,20 @@ from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 from mysite.core.helper import add_to_cart_helper,remove_from_cart_helper,add_to_wishlist_helper,remove_from_wishlist_helper
 from django.core.paginator import Paginator
+from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
 
 ###########################################
 from rest_framework.response import Response
 from rest_framework.decorators import api_view,permission_classes
 from rest_framework.serializers import ModelSerializer
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.authtoken.models import Token
+from rest_framework import exceptions
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
+from .permissions import UserPermission
 # Create your views here.
 
 # def add_user(request):
@@ -28,6 +32,47 @@ from rest_framework import status
 #         new_user.save()
 #     return render(request,'new_user.html',{'form':form})
 
+class ProductListView(ListView):
+    model = Product
+    paginate_by = 8
+    template_name = 'details.html'
+    context_object_name = 'product_list'
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductListView, self).get_context_data(**kwargs)
+        context['count'] = Product.objects.count()
+        return context
+
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'ecom/product_detail.html'
+    context_object_name = 'product'
+    
+
+
+# #get related products
+# def get_related_products(product):
+#     print(product.tags.tags__id)
+#     related_products = Product.objects.filter()
+#     return related_products.exclude(id=product.id)
+
+# #get details of the product
+# def product_detail(request, pk):
+#     product = get_object_or_404(Product, pk=pk)
+#     related_products = get_related_products(product)
+#     context = {
+#         'product':product,
+#         'related_products':related_products
+#     }
+#     return render(request,'ecom/product_detail.html',context)
+
+# #Pagination
+# def listing(request):
+#     prod_list = Product.objects.all()
+#     paginator = Paginator(prod_list, 12) 
+#     page_number = request.GET.get('page')
+#     page_obj = paginator.get_page(page_number)
+#     return render(request, 'details.html', {'prod': page_obj})
 
 #adding a new product
 def add_product(request):
@@ -168,29 +213,8 @@ def past_orders(request):
     return render(request,'ecom/past_orders.html',{'obj':obj})
 
 
-#get related products
-def get_related_products(product):
-    print(product.tags.tags__id)
-    related_products = Product.objects.filter()
-    return related_products.exclude(id=product.id)
 
-#get details of the product
-def product_detail(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    related_products = get_related_products(product)
-    context = {
-        'product':product,
-        'related_products':related_products
-    }
-    return render(request,'ecom/product_detail.html',context)
 
-#Pagination
-def listing(request):
-    prod_list = Product.objects.all()
-    paginator = Paginator(prod_list, 12) 
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    return render(request, 'details.html', {'prod': page_obj})
 
 #user profile
 def user_profile(request):
@@ -216,7 +240,6 @@ class ProductSerializer(ModelSerializer):
         fields = "__all__"
 
 @api_view()
-
 def get_all_products(request):
     products = Product.objects.all()
     return Response({"products":ProductSerializer(products, many=True).data})
@@ -231,15 +254,21 @@ def get_product(request,pk):
 
 #create product
 @api_view(http_method_names=('post',))
+@permission_classes([IsAuthenticated])
 def create_product(request):
-    serializer = ProductSerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
-    serializer.save()
-    prod = Product.objects.all().last()
-    return Response({"new_product":ProductSerializer(prod).data})
+    try:
+            serializer = ProductSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            prod = Product.objects.all().last()
+            return Response({"new_product":ProductSerializer(prod).data})
+    except:
+        raise exceptions.status.HTTP_403_FORBIDDEN
+
 
 #update
 @api_view(http_method_names=('put',))
+@permission_classes([IsAdminUser])
 def update_product(request,pk):
     prod = Product.objects.get(id=pk)
     serializer = ProductSerializer(prod, data=request.data)
@@ -249,6 +278,7 @@ def update_product(request,pk):
 
 #partial_update
 @api_view(http_method_names=('patch',))
+@permission_classes([IsAdminUser])
 def partial_update(request,pk):
     prod = Product.objects.get(id=pk)   
     serializer = ProductSerializer(prod, data=request.data, partial=True)
@@ -258,6 +288,7 @@ def partial_update(request,pk):
 
 #delete
 @api_view(http_method_names=('delete',))
+@permission_classes([IsAdminUser])
 def delete_product(request,pk):
     prod = Product.objects.get(id=pk)   
     prod.delete()
@@ -289,21 +320,27 @@ def login_user(request):
     password = request.data.get('password')
     user = authenticate(email=email, password=password)
     if user is not None:
-        login(request, user)
-        var = Token.objects.create(user=user_email)
-        return Response({"Message":serializer.data,"Token":var.key},status=status.HTTP_200_OK)
-    else:
-        return Response({"message:":"Invalid Credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+        try:
+            login(request, user)
+            var = Token.objects.create(user=user_email)
+            return Response({"Status":"Login Successful","Message":serializer.data,"Token":var.key},status=status.HTTP_200_OK)
+        
+        except ProfileUser.DoesNotExist:
+            raise exceptions.AuthenticationFailed('Invalid Credentials', status.HTTP_404_NOT_FOUND)
+
 
 @api_view(http_method_names=('post',))
 @permission_classes([IsAuthenticated])
 def logout_user(request):
-    Token.objects.filter(user=request.user).delete()
-    logout(request)
-    return Response({"message":"User logged out!!!!!"})
+    try:
+        Token.objects.filter(user=request.user).delete()
+        logout(request)
+        return Response({"message":"User logged out!!!!!"},status.HTTP_202_ACCEPTED)
+    except:
+        return Response({"message":"No user logged in"})
 
 @api_view(http_method_names=('get',))
-@permission_classes([IsAuthenticated])
+@permission_classes([UserPermission])
 def get_address(request):
     address = Address.objects.filter(user_id=request.user.id)
     return Response({"address":AddressSerializer(address,many=True).data})

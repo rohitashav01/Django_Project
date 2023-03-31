@@ -181,7 +181,8 @@
     </header>
 
     <div class="row">
-      {% for p in prod %}
+      <h1>Total No. of Products: {{count}}</h1>
+      {% for p in product_list %}
       <div class="col-lg-3 col-md-6 col-sm-6">
         
         <div class="card my-2 shadow-0">
@@ -211,17 +212,17 @@
       
     <nav aria-label="Page navigation example">
       <ul class="pagination justify-content-center">
-        {% if prod.has_previous %}
+        {% if page_obj.has_previous %}
           <li class="page-item">
-            <a class="page-link" href="?page={{ movies.previous_page_number }}">Previous</a>
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
           </li>
         {% else %}
           <li class="page-item disabled">
             <a class="page-link" href="#" tabindex="-1" aria-disabled="True">Previous</a>
           </li>
         {% endif %}
-        {% for i in prod.paginator.page_range %}
-          {% if prod.number == i %}
+        {% for i in page_obj.paginator.page_range %}
+          {% if page_obj.number == i %}
             <li class="page-item active" aria-current="page">
               <span class="page-link">
                 {{ i }}
@@ -231,9 +232,9 @@
             <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
           {% endif %}
         {% endfor %}
-        {% if prod.has_next %}
+        {% if page_obj.has_next %}
           <li class="page-item">
-            <a class="page-link" href="?page={{ movies.next_page_number }}">Next</a>
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
           </li>
         {% else %}
           <li class="page-item disabled">

@@ -14,13 +14,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path,include
 from blog.views import BlogView,BlogUpdate
 from blog.views import list_blogs,add_blog_user,user_login,user_logout,home_page,publish_blog,change_password
-from shop.views import add_product,add_to_cart,remove_from_cart,add_wishlist,add_user,login_user,user_address,user_logout,cart_details,get_address,show_wishlist,past_orders,listing,remove_from_wishlist,product_detail,user_profile,edit_profile,get_all_products
+from shop.views import add_product,add_to_cart,remove_from_cart,add_wishlist,add_user,login_user,user_address,user_logout,cart_details,get_address,show_wishlist,past_orders,remove_from_wishlist,user_profile,edit_profile,get_all_products
 from shop import views
 from django.conf import settings
 from django.conf.urls.static import static
+
 
 urlpatterns = [
     path('',home_page,name='home'),
@@ -47,8 +48,9 @@ urlpatterns = [
     path('cart',cart_details,name = 'cart'),
     path('address/details',get_address,name = 'addr_details'),
     path('past-orders',past_orders,name="past-order"),
-    path('listing',listing,name="prod_detail"),
-    path('details/<int:pk>',product_detail,name='details'),
+
+    path('listing',views.ProductListView.as_view(),name="prod_detail"),
+    path('details/<int:pk>', views.ProductDetailView.as_view(), name='details'),
     path('profile',user_profile,name='profile'),
     path('edit-profile',edit_profile,name='edit-profile'),
 
@@ -59,7 +61,6 @@ urlpatterns = [
     path('updateprod/<int:pk>',views.update_product),
     path('updateprod/<int:pk>/partial_update',views.partial_update),
     path('deleteprod/<int:pk>',views.delete_product),
-
     path('loginuser',views.login_user),
     path('logoutuser',views.logout_user),
     path('getaddr',views.get_address),
@@ -69,3 +70,5 @@ urlpatterns = [
     path('delete_addr/<int:address_id>/delete',views.delete_address),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
