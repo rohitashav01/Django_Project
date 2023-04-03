@@ -17,13 +17,22 @@ from django.contrib import admin
 from django.urls import path,include
 from blog.views import BlogView,BlogUpdate
 from blog.views import list_blogs,add_blog_user,user_login,user_logout,home_page,publish_blog,change_password
-from shop.views import add_product,add_to_cart,remove_from_cart,add_wishlist,add_user,login_user,user_address,user_logout,cart_details,get_address,show_wishlist,past_orders,remove_from_wishlist,user_profile,edit_profile,get_all_products
+from shop.views import add_to_cart,remove_from_cart,add_wishlist,login_user,user_address,user_logout,cart_details,get_address,show_wishlist,past_orders,remove_from_wishlist,user_profile,edit_profile,get_all_products,UserListView
 from shop import views
+from blog.views import PublishedBlogView, CreateBlogView, GetBlogView, AlterBlogView
 from django.conf import settings
 from django.conf.urls.static import static
 
 
 urlpatterns = [
+
+    path('publishedblogs', PublishedBlogView.as_view()),
+    path('blogs', CreateBlogView.as_view()),
+    path('blog/<int:pk>', GetBlogView.as_view()),
+    path('changeblog/<int:pk>', AlterBlogView.as_view()),
+
+
+    ################################################################
     path('',home_page,name='home'),
     path('demo/home',BlogView.as_view(),name='class'),
     path('demo/<int:pk>/update',BlogUpdate.as_view(),name='update'),
@@ -35,13 +44,13 @@ urlpatterns = [
     path('demo/changep',change_password,name='change_password',),
     path('demo/logout',user_logout,name='user_logout',),
     path('demo/<int:id>/publish',publish_blog,name='delete'),
-    path('shop/add',add_product,name='add'),
+    # path('shop/add',add_product,name='add'),
     path('shop/<int:id>',add_to_cart,name='add_cart'),
     path('remove/<int:pk>',remove_from_cart,name='remove'),
     path('shop/<int:id>/wishlist',add_wishlist,name='wishlist'),
     path('shop/<int:id>/remove',remove_from_wishlist,name='remove-wishlist'),
     path('wishlist',show_wishlist,name='show_wishlist'),
-    path('adduser',add_user,name='adduser'),
+    # path('adduser',add_user,name='adduser'),
     path('loginuser',login_user,name='loginuser'),
     path('address',user_address,name='address'),
     path('logout',user_logout,name = 'logout'),
@@ -49,8 +58,11 @@ urlpatterns = [
     path('address/details',get_address,name = 'addr_details'),
     path('past-orders',past_orders,name="past-order"),
 
+
     path('listing',views.ProductListView.as_view(),name="prod_detail"),
     path('details/<int:pk>', views.ProductDetailView.as_view(), name='details'),
+    path('add',views.ProductCreateView.as_view(),name='add'),
+    path('new-user',views.NewUserForm.as_p,name='adduser'),
     path('profile',user_profile,name='profile'),
     path('edit-profile',edit_profile,name='edit-profile'),
 
@@ -69,6 +81,7 @@ urlpatterns = [
     path('partialaddr/<int:address_id>/edit',views.partial_update_address),
     path('delete_addr/<int:address_id>/delete',views.delete_address),
 
+    path('users', UserListView.as_view())
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

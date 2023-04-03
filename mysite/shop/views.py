@@ -8,8 +8,11 @@ from mysite.core.helper import add_to_cart_helper,remove_from_cart_helper,add_to
 from django.core.paginator import Paginator
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
-
+from django.views.generic.edit import CreateView
+from django.views.generic.edit import FormView
 ###########################################
+
+
 from rest_framework.response import Response
 from rest_framework.decorators import api_view,permission_classes
 from rest_framework.serializers import ModelSerializer
@@ -20,6 +23,8 @@ from rest_framework import exceptions
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from .permissions import UserPermission
+from rest_framework import serializers
+from rest_framework.generics import ListAPIView, CreateAPIView, DestroyAPIView, UpdateAPIView, RetrieveAPIView
 # Create your views here.
 
 # def add_user(request):
@@ -49,7 +54,32 @@ class ProductDetailView(DetailView):
     context_object_name = 'product'
     
 
+class ProductCreateView(CreateView):
+    model = Product
+    template_name = 'add.html'
+    fields = '__all__'
+    success_url="/success"
 
+class UserFormView(FormView):
+    form_class = NewUserForm
+    template_name='ecom/adduser.html'
+    success_url = '/prod_detail'
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+    
+#adding a new product\
+# def add_product(request):
+#     if request.method == 'POST':
+#         form = ProdForm(request.POST,request.FILES)
+#         if form.is_valid():
+#             prod = form.save(commit = False)
+#             tags = request.POST.getlist('tags')
+#             prod.save()
+#             prod.tags.set(tags)
+#     else:
+#         form = ProdForm()
+#     return render(request,'add.html', {'form': form})
 # #get related products
 # def get_related_products(product):
 #     print(product.tags.tags__id)
@@ -74,30 +104,19 @@ class ProductDetailView(DetailView):
 #     page_obj = paginator.get_page(page_number)
 #     return render(request, 'details.html', {'prod': page_obj})
 
-#adding a new product
-def add_product(request):
-    if request.method == 'POST':
-        form = ProdForm(request.POST,request.FILES)
-        if form.is_valid():
-            prod = form.save(commit = False)
-            tags = request.POST.getlist('tags')
-            prod.save()
-            prod.tags.set(tags)
-    else:
-        form = ProdForm()
-    return render(request,'add.html', {'form': form})
 
 
 
-#adding a new user
-def add_user(request):
-    form = NewUserForm
-    if request.method == 'POST':
-        form = NewUserForm(request.POST,request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('prod_detail')
-    return render(request,'ecom/adduser.html',{'form':form})
+
+# #adding a new user
+# def add_user(request):
+#     form = NewUserForm
+#     if request.method == 'POST':
+#         form = NewUserForm(request.POST,request.FILES)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('prod_detail')
+#     return render(request,'ecom/adduser.html',{'form':form})
 
 
 #login User
@@ -386,3 +405,21 @@ def delete_address(request,address_id):
     address = get_object_or_404(Address, user_id=request.user.id, id=address_id)
     address.delete()
     return Response({"message":"Address Deleted"})
+
+
+####################################################################################
+
+
+class UserSerializer(ModelSerializer):
+    f_name = serializers.SerializerMethodField()
+    def get_f_name(self, name):
+        fn = name.first_name + " " + name.last_name
+        return fn
+    
+    class Meta:
+        model = ProfileUser
+        fields = ['first_name', 'last_name', 'f_name']
+
+class UserListView(ListAPIView):
+    queryset = ProfileUser.objects.all()
+    serializer_class = UserSerializer

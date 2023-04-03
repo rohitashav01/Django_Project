@@ -179,3 +179,65 @@ def publish_blog(request,**kwargs):
     else:
         raise PermissionDenied(Exception)
     return render(request,'published.html',{'blogs':blogs})
+
+#########################################################################################################
+
+from rest_framework.response import Response
+from rest_framework.decorators import api_view,permission_classes
+from rest_framework.serializers import ModelSerializer
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.authtoken.models import Token
+from rest_framework import exceptions
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework import status
+from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView, RetrieveUpdateDestroyAPIView, ListCreateAPIView
+
+
+class BlogSerializer(ModelSerializer):
+    class Meta:
+        model = Blog
+        fields = "__all__"
+
+class PublishedBlogView(ListAPIView):
+    queryset = Blog.objects.filter(is_published=True)
+    serializer_class = BlogSerializer
+    
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = BlogSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+class CreateBlogView(ListCreateAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializer
+
+    def create(self, request, *args, **kwargs):
+        response =  super().create(request, *args, **kwargs)
+        response.data = {"message":"Blog Created Successfully"}
+        return response
+
+class GetBlogView(RetrieveAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response({"title":serializer.data['title']})
+
+
+class AlterBlogView(RetrieveUpdateDestroyAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializer
+
+    def update(self, request, *args, **kwargs):
+        serializer = super().update(request, *args, **kwargs)
+        serializer.data = {"message": "Blog Updated Successfully"}
+        return serializer
+    
+    def destroy(self, request, *args, **kwargs):
+        response = super().destroy(request, *args, **kwargs)
+        response.data = {"message":"Blog Deleted Successfully"}
+        return response
