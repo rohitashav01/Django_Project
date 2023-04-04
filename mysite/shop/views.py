@@ -422,4 +422,4 @@ class UserSerializer(ModelSerializer):
 
 class UserListView(ListAPIView):
     queryset = ProfileUser.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = UserSerializer   

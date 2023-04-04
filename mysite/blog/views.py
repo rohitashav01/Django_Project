@@ -180,7 +180,7 @@ def publish_blog(request,**kwargs):
         raise PermissionDenied(Exception)
     return render(request,'published.html',{'blogs':blogs})
 
-#########################################################################################################
+############################################# Generic Views ############################################################
 
 from rest_framework.response import Response
 from rest_framework.decorators import api_view,permission_classes
@@ -190,9 +190,14 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.authtoken.models import Token
 from rest_framework import exceptions
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework import status
+from rest_framework import status, viewsets
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView, RetrieveUpdateDestroyAPIView, ListCreateAPIView
+from  django_filters.rest_framework import DjangoFilterBackend, FilterSet, CharFilter 
+
+###----From Shop app ---- ####
+from shop.models import ProfileUser, Address
+
 
 
 class BlogSerializer(ModelSerializer):
@@ -206,7 +211,7 @@ class PublishedBlogView(ListAPIView):
     
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
-        serializer = BlogSerializer(queryset, many=True)
+        serializer = self.get_serializer(queryset)
         return Response(serializer.data)
 
 class CreateBlogView(ListCreateAPIView):
@@ -241,3 +246,54 @@ class AlterBlogView(RetrieveUpdateDestroyAPIView):
         response = super().destroy(request, *args, **kwargs)
         response.data = {"message":"Blog Deleted Successfully"}
         return response
+
+#################################### Viewsets ########################################
+
+#Filtering Using Class
+class BlogFilterSet(FilterSet):
+    title = CharFilter(lookup_expr='contains')
+    class Meta:
+        model = Blog
+        fields = ['title','is_published']
+        
+
+class BlogViewSet(viewsets.ModelViewSet):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = BlogFilterSet
+    
+    def create(self, request, *args, **kwargs):
+        instance = super().create(request, *args, **kwargs)
+        instance.data = {"message":"Blog Created Successfully"}
+        return instance
+    
+    def update(self, request, *args, **kwargs):
+        instance = super().update(request, *args, **kwargs)
+        instance.data = {"message":"Blog Updated Successfully"}
+        return instance
+   
+    def destroy(self, request, *args, **kwargs):
+        response = super().destroy(request, *args, **kwargs)
+        response.status_code = status.HTTP_202_ACCEPTED
+        response.data = {"msg":"Deleted Successfully"}
+        return response
+    
+
+############---- Filtering Foreign Key----####################
+class AddressSerilazer(ModelSerializer):
+    class Meta:
+        model = Address
+        fields ='__all__'
+
+class AddressFilterSet(FilterSet):
+    user_id = CharFilter(lookup_expr='exact')
+    class Meta:
+        model = Address
+        fields = ['user_id']
+        
+class AddressViewSet(viewsets.ModelViewSet):
+    queryset = Address.objects.all()
+    serializer_class = AddressSerilazer
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = AddressFilterSet
