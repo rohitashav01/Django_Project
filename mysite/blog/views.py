@@ -297,3 +297,5 @@ class AddressViewSet(viewsets.ModelViewSet):
     serializer_class = AddressSerilazer
     filter_backends = [DjangoFilterBackend]
     filterset_class = AddressFilterSet
+    
+    
